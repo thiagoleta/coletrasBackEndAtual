@@ -20,11 +20,14 @@ namespace Projeto.Services.Controllers
     {
         //atributo
         private readonly IMaterialRepository materialRepository;
+        private readonly IContratoRepository contratoRepository;
         private readonly IMapper mapper;
 
-        public MaterialController(IMaterialRepository materialRepository, IMapper mapper)
+        public MaterialController(IMaterialRepository materialRepository, IContratoRepository contratoRepository, IMapper mapper
+            )
         {
             this.materialRepository = materialRepository;
+            this.contratoRepository = contratoRepository;
             this.mapper = mapper;
         }
 
@@ -41,11 +44,11 @@ namespace Projeto.Services.Controllers
 
                     var result = new
                     {
-                        message = "Material cadastrada com sucesso", 
+                        message = "Material cadastrado com sucesso", 
                         	material
                     };
 
-                    return Ok(result); //HTTP 200 (SUCESSO!)
+                    return StatusCode(200, $"Material cadastrado com sucesso"); //HTTP 200 (SUCESSO!)
                 }
                 catch (Exception e)
                 {
@@ -98,6 +101,12 @@ namespace Projeto.Services.Controllers
             {
                 //buscar o Material referente ao id informado..
                 var material = materialRepository.ObterPorId(id);
+                var contrato = contratoRepository.Consultar().FirstOrDefault(c => c.Cod_Material ==id);
+
+                if (contrato != null)
+                {
+                    return StatusCode(403,$"O Material não pode ser excluído, pois está Associado  ao Contrato {contrato.Cod_Contrato}");
+                }
 
                 //verificar se o Material foi encontrado..
                 if (material != null)

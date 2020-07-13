@@ -20,11 +20,13 @@ namespace Projeto.Services.Controllers
     {
         //atributo
         private readonly IClienteRepository clienteRepository;
+        private readonly IContratoRepository contratoRepository;
         private readonly IMapper mapper;
 
-        public ClienteController(IClienteRepository clienteRepository, IMapper mapper)
+        public ClienteController(IClienteRepository clienteRepository, IContratoRepository contratoRepository, IMapper mapper)
         {
             this.clienteRepository = clienteRepository;
+            this.contratoRepository = contratoRepository;
             this.mapper = mapper;
         }
 
@@ -98,6 +100,12 @@ namespace Projeto.Services.Controllers
             {
                 //buscar o Cliente referente ao id informado..
                 var cliente = clienteRepository.ObterPorId(id);
+                var contrato = contratoRepository.Consultar().FirstOrDefault(c=> c.Cod_Cliente == id);
+
+                if (contrato != null )
+                {
+                    return StatusCode(403,$"O Cliente não pode ser excluído, pois possui uma Associação com o contrato {contrato.Cod_Contrato}");
+                }
 
                 //verificar se o Cliente foi encontrado..
                 if (cliente != null)

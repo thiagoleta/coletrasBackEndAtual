@@ -1,3 +1,4 @@
+using Projeto.Services.Models.Rota;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,6 @@ namespace Projeto.Services.Models.Cliente
         public int Contrato_Numero { get; set; }
         public string Turno { get; set; }
 
-        //region Associacao RefForeignKey
-        public int Cod_Rota { get; set; }
+        public RotaConsultaModel Rota { get; set; }
     }
 }

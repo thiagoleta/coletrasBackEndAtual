@@ -14,7 +14,7 @@ using Projeto.Services.Util;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]

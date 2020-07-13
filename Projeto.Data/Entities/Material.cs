@@ -22,12 +22,5 @@ namespace Projeto.Data.Entities
 		public string Material_Coletado { get; set; }
 		#endregion
 
-		#region Associacao ForeignKey
-		//public List<Contrato> Contrato { get; set; }
-		#endregion
-
-		#region Associacao RefForeignKey
-		#endregion
-
 	}
 }

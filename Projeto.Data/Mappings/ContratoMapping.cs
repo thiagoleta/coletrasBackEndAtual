@@ -21,8 +21,12 @@ namespace Projeto.Data.Mappings
 
             #region Mapeamento dos Relacionamentos
 
+            //Relacionamento um para 1
+            builder.Property(c => c.Cod_Cliente);
             builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.Cod_Cliente);
-            builder.HasOne(m => m.Material).WithMany().HasForeignKey(m => m.Cod_Material);
+
+            builder.Property(c => c.Cod_Material);
+            builder.HasOne(c=> c.Material).WithMany().HasForeignKey(C=> C.Cod_Material);
 
             #endregion
 

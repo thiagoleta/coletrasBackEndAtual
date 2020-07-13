@@ -16,19 +16,19 @@ namespace Projeto.Data.Mappings
 
 
             //chave primária (obrigatório)
-            builder.HasKey(r => r.CodRota);
+            builder.HasKey(r => r.Cod_Rota);
 
-            builder.Property(r => r.CodRota)
-          .HasColumnName("Cod_Rota");
+          
 
             builder.Property(r => r.Cod_Motorista)
         .HasColumnName("Cod_Motorista");
 
        
 
-            #region Mapeamento dos Relacionamentos
-
-            builder.HasOne(x => x.Motorista).WithMany().HasForeignKey(x => x.Cod_Motorista);
+            #region Mapeamento dos Relacionamentos            
+            //Relacionamento um para 1
+            builder.Property(r => r.Cod_Motorista);
+            builder.HasOne(r => r.Motorista).WithMany().HasForeignKey(r => r.Cod_Motorista);
 
             #endregion
         }

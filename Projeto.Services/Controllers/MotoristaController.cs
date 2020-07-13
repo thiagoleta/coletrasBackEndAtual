@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
 using Projeto.Data.Repository;
@@ -22,11 +23,13 @@ namespace Projeto.Services.Controllers
 
         //atributo
         private readonly IMotoristaRepository motoristaRepository;
+        private readonly IRotaRepository rotaRepository;
         private readonly IMapper mapper;
 
-        public MotoristaController(IMotoristaRepository motoristaRepository, IMapper mapper)
+        public MotoristaController(IMotoristaRepository motoristaRepository, IRotaRepository rotaRepository, IMapper mapper)
         {
             this.motoristaRepository = motoristaRepository;
+            this.rotaRepository = rotaRepository;
             this.mapper = mapper;
         }
 
@@ -72,7 +75,7 @@ namespace Projeto.Services.Controllers
 
                     var result = new
                     {
-                        message = "Produto atualizado com sucesso.",
+                        message = "Motorista atualizado com sucesso.",
                         motorista
                     };
 
@@ -96,13 +99,21 @@ namespace Projeto.Services.Controllers
             {
                 var motorista = motoristaRepository.ObterPorId(id);
 
+                var rota = rotaRepository.Consultar().FirstOrDefault(m => m.Motorista.Cod_Motorista == id);
+
+                if (rota != null)
+                {
+                    return StatusCode(403, $"O Motorista {motorista.Nome}  Não pode ser excluído, pois existe uma rota Associada.");
+
+                }
+
                 if (motorista != null)
                 {
                     motoristaRepository.Excluir(motorista);
 
                     var result = new
                     {
-                        message = "Produto excluído com sucesso.",
+                        message = "Motorista excluído com sucesso.",
                         motorista
                     };
 
@@ -111,7 +122,7 @@ namespace Projeto.Services.Controllers
 
                 else
                 {
-                    return BadRequest("Produto não encontrado.");
+                    return BadRequest("Motorista não encontrado.");
                 }
             }
             catch (Exception e)

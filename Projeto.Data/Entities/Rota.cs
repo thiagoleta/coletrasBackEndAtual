@@ -9,7 +9,7 @@ namespace Projeto.Data.Entities
    public class Rota
     {
         [Key]
-        public int CodRota { get; set; }
+        public int Cod_Rota { get; set; }
         [ForeignKey("Cod_Motorista")]
         public int Cod_Motorista { get; set; }
         public string Nome { get; set; }

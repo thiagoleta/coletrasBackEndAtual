@@ -1,3 +1,5 @@
+using Projeto.Services.Models.Cliente;
+using Projeto.Services.Models.Material;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,10 @@ namespace Projeto.Services.Models.Contrato
         public int Contrato_Numero { get; set; }
 
         //region Associacao RefForeignKey
-        public int Cod_Cliente { get; set; }
-        public int Cod_Material { get; set; }
+        //public int Cod_Cliente { get; set; }
+        //public int Cod_Material { get; set; }
+
+        public MaterialConsultaModel Material { get; set; }
+        public ClienteConsultaModel Cliente { get; set; }
     }
 }
