@@ -20,9 +20,13 @@ namespace Projeto.Data.Mappings
             builder.HasKey(o => o.Cod_OS);
 
             #region Mapeamento dos Relacionamentos
+            
+            builder.Property(o => o.Cod_Contrato);
+            builder.HasOne(o => o.Contrato).WithMany().HasForeignKey(o => o.Cod_Contrato);
 
-            builder.HasOne(m => m.MesReferencia).WithMany().HasForeignKey(m => m.Cod_MesReferencia);
-            builder.HasOne(c => c.Contrato).WithMany().HasForeignKey(c => c.Cod_Contrato);
+            builder.Property(o => o.Cod_MesReferencia);
+            builder.HasOne(o => o.MesReferencia).WithMany().HasForeignKey(o=> o.Cod_MesReferencia);            
+
 
             #endregion
 

@@ -1,3 +1,5 @@
+using Projeto.Services.Models.Contrato;
+using Projeto.Services.Models.MesReferencia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,7 @@ namespace Projeto.Services.Models.OS
         public DateTime Data_Cancelamento { get; set; }
 
         //region Associacao RefForeignKey
-        public int Cod_MesReferencia { get; set; }
-        public int Cod_Contrato { get; set; }
+        public MesReferenciaConsultaModel MesReferencia { get; set; }
+        public ContratoConsultaModel Contrato { get; set; }
     }
 }
