@@ -8,10 +8,8 @@ namespace Projeto.Services.Models.Cliente
 {
     public class ClienteConsultaModel
     {
-        //region PrimareKey
-        public int Cod_Cliente { get; set; }
-
-        //region KeyColumns
+        
+        public int Cod_Cliente { get; set; }        
         public string CPF_CNPJ { get; set; }
         public string NomeCompleto_RazaoSocial { get; set; }
         public string Fantasia { get; set; }
@@ -30,8 +28,7 @@ namespace Projeto.Services.Models.Cliente
         public string Observacao { get; set; }
         public string Referencia { get; set; }
         public int OS_Numero { get; set; }
-        public int Contrato_Numero { get; set; }
-        public string Turno { get; set; }
+        public int Contrato_Numero { get; set; }       
 
         public RotaConsultaModel Rota { get; set; }
     }

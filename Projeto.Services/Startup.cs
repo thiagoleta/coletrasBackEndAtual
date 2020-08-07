@@ -55,6 +55,10 @@ namespace Projeto.Services
             services.AddTransient<IMesReferenciaRepository, MesReferenciaRepository>();
             services.AddTransient<IOSRepository, OSRepository>();
             services.AddTransient<IPagamentoRepository, PagamentoRepository>();
+            services.AddTransient<IDiasColetaRepository, DiasColetaRepository>();
+            services.AddTransient<IPerfilRepository, PerfilRepository>();
+            services.AddTransient<IRoteiroRepository, RoteiroRepository>();
+            services.AddTransient<ITurnoRepository, TurnoRepository>();
 
             #endregion
 

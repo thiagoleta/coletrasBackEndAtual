@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
 using Projeto.Data.Repository;
@@ -20,32 +21,83 @@ namespace Projeto.Services.Controllers
     {
         //atributo
         private readonly IOSRepository osRepository;
+        private readonly IMesReferenciaRepository mesRepository;
+        private readonly IContratoRepository contratoRepository;
+        private readonly IClienteRepository ClienteRepository;
         private readonly IMapper mapper;
 
-        public OSController(IOSRepository osRepository, IMapper mapper)
+        public OSController(IOSRepository osRepository, IMesReferenciaRepository mesRepository, IContratoRepository contratoRepository, IClienteRepository clienteRepository, IMapper mapper)
         {
             this.osRepository = osRepository;
+            this.mesRepository = mesRepository;
+            this.contratoRepository = contratoRepository;
+            ClienteRepository = clienteRepository;
             this.mapper = mapper;
         }
 
         [HttpPost]
         public IActionResult Post(OSCadastroModel model)
         {
-            //verificando se os campos da model passaram nas ões
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var os = mapper.Map<OS>(model);
+                    var os = new OS();
+                    os.Data_Geracao = DateTime.Now;
+                    os.Data_Coleta = null;
+                    os.Flag_Ativo = true;
+                    os.Flag_Cancelado = false;
+                    os.Quantidade_Coletada = 0;
+                    os.Flag_Coleta = false;
+                    os.Flag_Cancelado = false;
+                    os.Motivo_Cancelamento = null;
+                    os.Data_Cancelamento = null;
+
+                    var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
+
+                    if (MesRef == null)
+                    {
+                        return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
+                    }
+
+                    os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
+
+                    if (model.Clientes != null)
+                    {
+                        foreach (var item in model.Clientes)
+                        {
+                            var cliente = new Cliente();
+                            os.Cod_Cliente = item.Cod_Cliente;
+
+                            var contratoAtivo = contratoRepository.Consultar()
+                            .FirstOrDefault(co => co.Cod_Cliente.Equals(os.Cod_Cliente)
+                            && co.Flag_Termino.Equals(true));
+
+                            if (contratoAtivo != null)
+                            {
+                                os.Cod_Contrato = contratoAtivo.Cod_Contrato;
+                            }
+                            else
+                            {
+                                return StatusCode(403, $"Não existe contrato Ativo para o {item.Cod_Cliente}.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return StatusCode(403, $"Favor Selecionar Clientes para geração das OS.");
+                    }
+
                     osRepository.Inserir(os);
 
                     var result = new
                     {
-                        message = "OS cadastrada com sucesso", 
-                        	os
+                        message = "OS cadastrada com sucesso",
+                        os
                     };
 
-                    return Ok(result); //HTTP 200 (SUCESSO!)
+                    return Ok(result);
                 }
                 catch (Exception e)
                 {
@@ -73,7 +125,7 @@ namespace Projeto.Services.Controllers
                     var result = new
                     {
                         message = "OS atualizado com sucesso",
-                        	os
+                        os
                     };
 
                     return Ok(result); //HTTP 200 (SUCESSO!)
@@ -108,7 +160,7 @@ namespace Projeto.Services.Controllers
                     var result = new
                     {
                         message = "OS excluído com sucesso.",
-                        	os
+                        os
                     };
 
                     return Ok(result);

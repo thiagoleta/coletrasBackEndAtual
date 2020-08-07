@@ -35,7 +35,11 @@ namespace Projeto.Data.Context
             modelBuilder.ApplyConfiguration(new OSMapping());
             modelBuilder.ApplyConfiguration(new PagamentoMapping());
             modelBuilder.ApplyConfiguration(new RotaMapping());
-
+            modelBuilder.ApplyConfiguration(new RoteiroMapping());
+            modelBuilder.ApplyConfiguration(new TurnoMapping());
+            modelBuilder.ApplyConfiguration(new Dias_ColetaMapping());
+            modelBuilder.ApplyConfiguration(new PerfilMapping());
+            modelBuilder.ApplyConfiguration(new UsuarioMapping());
 
         }
 
@@ -53,6 +57,11 @@ namespace Projeto.Data.Context
         public DbSet<OS> OS { get; set; } //LAMBDA Functions
         public DbSet<Pagamento> Pagamento { get; set; } //LAMBDA Functions
         public DbSet<Rota> Rota { get; set; } //LAMBDA Functions
+        public DbSet<Roteiro> Roteiro { get; set; } //LAMBDA Functions
+        public DbSet<Turno> Turno { get; set; } //LAMBDA Functions
+        public DbSet<Dias_Coleta> Dias_Coleta { get; set; } //LAMBDA Functions
+        public DbSet<Perfil> Perfil { get; set; } //LAMBDA Functions
+        public DbSet<Usuario> Usuario { get; set; } //LAMBDA Functions
 
     }
 

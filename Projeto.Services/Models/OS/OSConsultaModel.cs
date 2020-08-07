@@ -1,3 +1,4 @@
+using Projeto.Services.Models.Cliente;
 using Projeto.Services.Models.Contrato;
 using Projeto.Services.Models.MesReferencia;
 using System;
@@ -12,19 +13,20 @@ namespace Projeto.Services.Models.OS
         //region PrimareKey
         public int Cod_OS { get; set; }
 
-        //region KeyColumns
+        
         public DateTime Data_Geracao { get; set; }
         public int Quantidade_Coletada { get; set; }
         public DateTime Data_Coleta { get; set; }
         public bool Flag_Coleta { get; set; }
-        public bool Flag_Ativo { get; set; }
-        public int OS_Numero { get; set; }
+        public bool Flag_Ativo { get; set; }        
         public bool Flag_Cancelado { get; set; }
         public string Motivo_Cancelamento { get; set; }
         public DateTime Data_Cancelamento { get; set; }
+        public int Cod_Cliente { get; set; }
 
-        //region Associacao RefForeignKey
+
         public MesReferenciaConsultaModel MesReferencia { get; set; }
         public ContratoConsultaModel Contrato { get; set; }
+        public ClienteConsultaModel Clientes { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Projeto.Services.Models.Roteiro;
 
 namespace Projeto.Services.Mappings
 {
@@ -54,6 +55,9 @@ namespace Projeto.Services.Mappings
             
 
             CreateMap<UsuarioEdicaoModel, UsuarioCadastroModel>();
+
+            CreateMap<RoteiroCadastroModel, Roteiro>();
+            CreateMap<RoteiroEdicaoModel, Roteiro>();
         }
     }
 }

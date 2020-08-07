@@ -31,7 +31,8 @@ namespace Projeto.Data.Repository
             return dataContext.OS
                 .Include(m => m.MesReferencia)
                 .Include(co => co.Contrato)                
-                .Include(mo => mo.Contrato.Cliente.Rota.Motorista).FirstOrDefault(o => o.Cod_OS == id);
+                .Include(c => c.Clientes)
+                .FirstOrDefault(o => o.Cod_OS == id);
 
         }
 

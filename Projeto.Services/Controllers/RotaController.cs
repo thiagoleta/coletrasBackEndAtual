@@ -19,14 +19,12 @@ namespace Projeto.Services.Controllers
     public class RotaController : ControllerBase
     {
         //atributo
-        private readonly IRotaRepository rotaRepository;
-        private readonly IClienteRepository clienteRepository;
+        private readonly IRotaRepository rotaRepository;        
         private readonly IMapper mapper;
 
-        public RotaController(IRotaRepository rotaRepository, IClienteRepository clienteRepository, IMapper mapper)
+        public RotaController(IRotaRepository rotaRepository, IMapper mapper)
         {
             this.rotaRepository = rotaRepository;
-            this.clienteRepository = clienteRepository;
             this.mapper = mapper;
         }
 
@@ -100,12 +98,7 @@ namespace Projeto.Services.Controllers
             {
                 //buscar o Rota referente ao id informado..
                 var rota = rotaRepository.ObterPorId(id);
-                var cliente = clienteRepository.Consultar().FirstOrDefault(r=> r.Cod_Rota == id);
-
-                if (cliente != null)
-                {
-                    return StatusCode(403,$"A Rota não pode ser excluída, pois possui uma Associação com o cliente {cliente.NomeCompleto_RazaoSocial}. ");
-                }
+      
 
                 //verificar se o Rota foi encontrado..
                 if (rota != null)

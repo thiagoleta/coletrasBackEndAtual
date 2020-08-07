@@ -7,14 +7,11 @@ namespace Projeto.Services.Models.Material
 {
     public class MaterialCadastroModel
     {
-        
-        //region KeyColumns
         public string Descricao { get; set; }
         public int Volume { get; set; }
         public string Observacao { get; set; }
         public string Material_Coletado { get; set; }
-
-        //region Associacao RefForeignKey
+        
 
     }
 }

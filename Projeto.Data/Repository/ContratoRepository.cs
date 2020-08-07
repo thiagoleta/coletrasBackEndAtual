@@ -30,7 +30,8 @@ namespace Projeto.Data.Repository
         {
             return dataContext.Contrato
                 .Include(m => m.Material)
-                .Include(c => c.Cliente).FirstOrDefault(con => con.Cod_Contrato == id );
+                .Include(c => c.Cliente)
+                .FirstOrDefault(con => con.Cod_Contrato == id );
         }
     }
 }

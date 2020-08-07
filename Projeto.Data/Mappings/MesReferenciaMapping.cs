@@ -13,18 +13,8 @@ namespace Projeto.Data.Mappings
         {
             //nome da tabela no banco de dados (opcional)
             builder.ToTable("MesReferencia");
-
-            //chave primA?ria da tabela
-            //para o EF, todo campo int que for definido como chave primA?ria
-            //jA? A© criado como identity (auto-incremento)
-            builder.HasKey(m => m.Cod_MesReferencia);
-
-            #region Mapeamento dos Relacionamentos
-
-
-            #endregion
-
-
+            
+            builder.HasKey(m => m.Cod_MesReferencia);     
 
         }
 
