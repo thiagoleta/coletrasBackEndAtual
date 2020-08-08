@@ -20,9 +20,9 @@ namespace Projeto.Data.Entities
 		public int Mes { get; set; }
 		public int Ano { get; set; }
 		public DateTime Data_Inicio { get; set; }
-		public DateTime Data_Termino { get; set; }
+		public DateTime? Data_Termino { get; set; }
 		public bool Flag_Encerramento { get; set; }
-		public DateTime Data_Encerramento { get; set; }
+		public DateTime? Data_Encerramento { get; set; }
 		#endregion
 
 		#region Associacao ForeignKey

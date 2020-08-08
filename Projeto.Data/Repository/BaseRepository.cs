@@ -44,6 +44,12 @@ namespace Projeto.Data.Repository
                 .ToList();
         }
 
+        internal void Inserir(List<T> entity)
+        {
+            dataContext.Entry(entity).State = EntityState.Added; //inserção
+            dataContext.SaveChanges(); //executando
+        }
+
         public virtual T Obter(Func<T, bool> where)
         {
             return dataContext.Set<T>()
@@ -60,6 +66,6 @@ namespace Projeto.Data.Repository
             dataContext.Entry(entity).State = EntityState.Added; //inserção
             dataContext.SaveChanges(); //executando
         }
-
+        
     }
 }

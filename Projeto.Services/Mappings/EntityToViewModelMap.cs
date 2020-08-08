@@ -32,6 +32,7 @@ namespace Projeto.Services.Mappings
 
             #region Cliente
             CreateMap<Cliente, ClienteConsultaModel>();
+            CreateMap<Cliente, ClienteOSModel>();
             #endregion
 
             #region Configucacao

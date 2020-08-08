@@ -44,7 +44,8 @@ namespace Projeto.Services.Controllers
                 try
                 {
                     var os = new OS();
-                    os.Data_Geracao = DateTime.Now;
+
+                    os.Data_Geracao =  DateTime.Now;
                     os.Data_Coleta = null;
                     os.Flag_Ativo = true;
                     os.Flag_Cancelado = false;
@@ -54,43 +55,46 @@ namespace Projeto.Services.Controllers
                     os.Motivo_Cancelamento = null;
                     os.Data_Cancelamento = null;
 
-                    var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
+                        var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
 
-                    if (MesRef == null)
-                    {
-                        return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
-                    }
+                        if (MesRef == null)
+                        {
+                            return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
+                        }
 
                     os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
 
-                    if (model.Clientes != null)
-                    {
-                        foreach (var item in model.Clientes)
+                        if (model.Clientes != null)
                         {
-                            var cliente = new Cliente();
-                            os.Cod_Cliente = item.Cod_Cliente;
-
-                            var contratoAtivo = contratoRepository.Consultar()
-                            .FirstOrDefault(co => co.Cod_Cliente.Equals(os.Cod_Cliente)
-                            && co.Flag_Termino.Equals(true));
-
-                            if (contratoAtivo != null)
+                            foreach (var itens in model.Clientes)
                             {
+                                var cliente = new Cliente();
+                            os.Cod_Cliente = itens.Cod_Cliente;
+
+                                var contratoAtivo = contratoRepository.Consultar()
+                                .FirstOrDefault(co => co.Cod_Cliente.Equals(os.Cod_Cliente)
+                                && co.Flag_Termino.Equals(false));
+
+                                if (contratoAtivo != null)
+                                {
                                 os.Cod_Contrato = contratoAtivo.Cod_Contrato;
+                                osRepository.Inserir(os);
+
                             }
-                            else
-                            {
-                                return StatusCode(403, $"Não existe contrato Ativo para o {item.Cod_Cliente}.");
+                                else
+                                {
+                                    return StatusCode(403, $"Não existe contrato Ativo para o {os.Cod_Cliente}.");
+                                }
                             }
-                        }
                     }
+
                     else
                     {
-                        return StatusCode(403, $"Favor Selecionar Clientes para geração das OS.");
+                        return StatusCode(403, $"Favor selecionar o cliente para geração das OSs. ");
                     }
 
-                    osRepository.Inserir(os);
 
+                  
                     var result = new
                     {
                         message = "OS cadastrada com sucesso",
