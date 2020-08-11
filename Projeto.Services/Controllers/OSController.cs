@@ -38,54 +38,57 @@ namespace Projeto.Services.Controllers
         [HttpPost]
         public IActionResult Post(OSCadastroModel model)
         {
-            
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var os = new OS();
 
-                    os.Data_Geracao =  DateTime.Now;
-                    os.Data_Coleta = null;
-                    os.Flag_Ativo = true;
-                    os.Flag_Cancelado = false;
-                    os.Quantidade_Coletada = 0;
-                    os.Flag_Coleta = false;
-                    os.Flag_Cancelado = false;
-                    os.Motivo_Cancelamento = null;
-                    os.Data_Cancelamento = null;
-
-                        var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
-
-                        if (MesRef == null)
+                    if (model.Clientes != null)
+                    {
+                        foreach (var itens in model.Clientes)
                         {
-                            return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
-                        }
 
-                    os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
+                            var cliente = new Cliente();
 
-                        if (model.Clientes != null)
-                        {
-                            foreach (var itens in model.Clientes)
+
+                            var contratoAtivo = contratoRepository.Consultar()
+                            .FirstOrDefault(co => co.Cod_Cliente.Equals(itens.Cod_Cliente)
+                            && co.Flag_Termino.Equals(false));
+
+                            if (contratoAtivo != null)
                             {
-                                var cliente = new Cliente();
-                            os.Cod_Cliente = itens.Cod_Cliente;
 
-                                var contratoAtivo = contratoRepository.Consultar()
-                                .FirstOrDefault(co => co.Cod_Cliente.Equals(os.Cod_Cliente)
-                                && co.Flag_Termino.Equals(false));
+                                var os = new OS();
 
-                                if (contratoAtivo != null)
-                                {
                                 os.Cod_Contrato = contratoAtivo.Cod_Contrato;
+                                os.Cod_Cliente = itens.Cod_Cliente;
+                                os.Data_Geracao = DateTime.Now;
+                                os.Data_Coleta = null;
+                                os.Flag_Ativo = true;
+                                os.Flag_Cancelado = false;
+                                os.Quantidade_Coletada = 0;
+                                os.Flag_Coleta = false;
+                                os.Flag_Cancelado = false;
+                                os.Motivo_Cancelamento = null;
+                                os.Data_Cancelamento = null;
+
+                                var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
+
+                                if (MesRef == null)
+                                {
+                                    return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
+                                }
+
+                                os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
                                 osRepository.Inserir(os);
 
                             }
-                                else
-                                {
-                                    return StatusCode(403, $"Não existe contrato Ativo para o {os.Cod_Cliente}.");
-                                }
+                            else
+                            {
+                                return StatusCode(403, $"Não existe contrato Ativo para o {itens.Cod_Cliente}.");
                             }
+                        }
                     }
 
                     else
@@ -94,11 +97,10 @@ namespace Projeto.Services.Controllers
                     }
 
 
-                  
+
                     var result = new
                     {
-                        message = "OS cadastrada com sucesso",
-                        os
+                        message = "OS cadastrada com sucesso",                        
                     };
 
                     return Ok(result);
