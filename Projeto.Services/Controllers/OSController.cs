@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
 using Projeto.Data.Repository;
 using Projeto.Services.Models.OS;
+using Projeto.Services.Util;
 
 namespace Projeto.Services.Controllers
 {
@@ -25,15 +27,19 @@ namespace Projeto.Services.Controllers
         private readonly IContratoRepository contratoRepository;
         private readonly IClienteRepository clienteRepository;
         private readonly IConfiguracaoRepository configuracaoRepository;
+        private readonly Criptografia md5Encrypt; //crosscutting de criptografia
+        private readonly MailService mailService;
         private readonly IMapper mapper;
 
-        public OSController(IOSRepository osRepository, IMesReferenciaRepository mesRepository, IContratoRepository contratoRepository, IClienteRepository clienteRepository, IConfiguracaoRepository configuracaoRepository, IMapper mapper)
+        public OSController(IOSRepository osRepository, IMesReferenciaRepository mesRepository, IContratoRepository contratoRepository, IClienteRepository clienteRepository, IConfiguracaoRepository configuracaoRepository, Criptografia md5Encrypt, MailService mailService, IMapper mapper)
         {
             this.osRepository = osRepository;
             this.mesRepository = mesRepository;
             this.contratoRepository = contratoRepository;
             this.clienteRepository = clienteRepository;
             this.configuracaoRepository = configuracaoRepository;
+            this.md5Encrypt = md5Encrypt;
+            this.mailService = mailService;
             this.mapper = mapper;
         }
 
@@ -221,5 +227,21 @@ namespace Projeto.Services.Controllers
                 return StatusCode(500, "Erro: " + e.Message);
             }
         }
+
+        private void EnviarEmailDeBoasVindas(Cliente cliente)
+        {
+            var assunto = "Conta de Usuário criada com sucesso- COTI INFORMÁTICA";
+            var texto = new StringBuilder();
+
+            texto.Append($"Olá, {cliente.NomeCompleto_RazaoSocial}\n\n");
+            texto.Append($"Sua conta de usuário foi criada com sucesso!\n");
+            texto.Append($"Faça seu login para ter acesso ao sistema.");
+            texto.Append($"\n\n");
+            texto.Append($"Atenciosamente,\n");
+            texto.Append($"Equipe COTI Informática");
+
+            mailService.SendMail(cliente.Email, assunto, texto.ToString());
+        }
+
     }
 }

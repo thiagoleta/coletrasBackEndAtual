@@ -16,6 +16,7 @@ using Projeto.Data.Contracts;
 using Projeto.Data.Repository;
 using Projeto.Data.Repository.RepositoriosDapper;
 using Projeto.Services.Configurations;
+using Projeto.Services.Util;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Projeto.Services
@@ -42,6 +43,21 @@ namespace Projeto.Services
 
             services.AddDbContext<DataColetrans>
                  (options => options.UseSqlServer(Configuration.GetConnectionString("Coletrans")));
+
+            #region Criptografias e Serviços de Email
+            services.AddTransient<Criptografia>();
+            services.AddTransient<SHA1Encrypt>();
+
+            var mailSettings = new MailSettings();
+            new ConfigureFromConfigurationOptions<MailSettings>
+                (Configuration.GetSection("MailSettings"))
+                .Configure(mailSettings);
+
+            services.AddTransient<MailService>
+                (map => new MailService(mailSettings));
+
+            #endregion
+
 
 
             #region Injeção de Dependência EntityFramework
