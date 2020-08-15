@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 
 namespace Projeto.Services.Models.Configucacao
 {
-    public class ConfigucacaoEdicaoModel
+    public class ConfiguracaoConsultaModel
     {
-
-        //region PrimareKey
-        public int Cod_Configucacao { get; set; }
-
-        //region KeyColumns
+        
+        public int Cod_Configuracao { get; set; }        
         public string Empresa { get; set; }
         public string Numero_Inea { get; set; }
         public string Logradouro { get; set; }
@@ -22,8 +19,7 @@ namespace Projeto.Services.Models.Configucacao
         public string CEP { get; set; }
         public string UF { get; set; }
         public string Telefones { get; set; }
-
-        //region Associacao RefForeignKey
+        public bool Flag_Ativo { get; set; }
 
     }
 }

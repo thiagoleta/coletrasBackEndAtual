@@ -24,9 +24,8 @@ namespace Projeto.Services.Models.Cliente
         public string Email { get; set; }
         public bool Flag_Ativo { get; set; }
         public string Observacao { get; set; }
-        public string Referencia { get; set; }        
-        public int Contrato_Numero { get; set; }      
-        public int Cod_Rota { get; set; }
+        public string Referencia { get; set; }                
+   
 
     }
 }

@@ -1,4 +1,5 @@
 using Projeto.Services.Models.Cliente;
+using Projeto.Services.Models.Configucacao;
 using Projeto.Services.Models.Contrato;
 using Projeto.Services.Models.MesReferencia;
 using System;
@@ -28,5 +29,6 @@ namespace Projeto.Services.Models.OS
         public MesReferenciaConsultaModel MesReferencia { get; set; }
         public ContratoConsultaModel Contrato { get; set; }
         public ClienteConsultaModel Clientes { get; set; }
+        public ConfiguracaoConsultaModel Configuracao { get; set; }
     }
 }

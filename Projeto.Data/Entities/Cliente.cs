@@ -7,15 +7,8 @@ using System.Text;
 namespace Projeto.Data.Entities
 {
    public class Cliente
-    {
-		[Key]
-
-		#region PrimareKey
-		public int Cod_Cliente { get; set; }
-		#endregion
-
-
-		//#region KeyColumns
+    {	
+		public int Cod_Cliente { get; set; }		
 		public string CPF_CNPJ { get; set; }
 		public string NomeCompleto_RazaoSocial { get; set; }
 		public string Fantasia { get; set; }
@@ -33,12 +26,7 @@ namespace Projeto.Data.Entities
 		public bool Flag_Ativo { get; set; }
 		public string Observacao { get; set; }
 		public string Referencia { get; set; }
-		//public int OS_Numero { get; set; }
-		//public int Contrato_Numero { get; set; }
-		//public string Turno { get; set; }
 		
-		//public int Cod_Rota { get; set; }
-		//public Rota Rota { get; set; }	
 
 
 	}

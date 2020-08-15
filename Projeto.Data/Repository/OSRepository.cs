@@ -22,6 +22,7 @@ namespace Projeto.Data.Repository
         {
             return dataContext.OS
                 .Include(m => m.MesReferencia)
+                .Include(con => con.Configuracao)
                 .Include(co => co.Contrato).ToList();
                 
         }
@@ -32,6 +33,7 @@ namespace Projeto.Data.Repository
                 .Include(m => m.MesReferencia)
                 .Include(co => co.Contrato)                
                 .Include(c => c.Clientes)
+                .Include(con => con.Configuracao)
                 .FirstOrDefault(o => o.Cod_OS == id);
 
         }

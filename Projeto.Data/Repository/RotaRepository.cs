@@ -18,27 +18,6 @@ namespace Projeto.Data.Repository
             this.dataContext = dataContext;
         }
 
-        //sobrescrita de método (OVERRIDE)
-        public override List<Rota> Consultar()
-        {
-            //retornar uma consulta de Rota 
-            //fazendo JOIN com a entidade Motorista
-            return dataContext.Rota
-                    .Include(p => p.Motorista) //JOIN..
-                    .ToList();
-        }
-
-        public override Rota ObterPorId(int id)
-        {
-            //retornar uma consulta de Rota 
-            //fazendo JOIN com a entidade Motorista
-            return dataContext.Rota
-                    .Include(p => p.Motorista) //JOIN..
-                    .FirstOrDefault(p => p.Cod_Rota == id);
-        }
-
-        #region MyRegion
-
         ////sobrescrita de método (OVERRIDE)
         //public override List<Rota> Consultar()
         //{
@@ -49,39 +28,16 @@ namespace Projeto.Data.Repository
         //            .ToList();
         //}
 
-        ////sobrescrita de método (OVERRIDE)
-        //public override List<Rota> Consultar(Func<Rota, bool> where)
-        //{
-        //    //retornar uma consulta de Rota 
-        //    //fazendo JOIN com a entidade Motorista
-        //    return dataContext.Rota
-        //            .Include(p => p.Motorista) //JOIN..
-        //            .Where(where)
-        //            .ToList();
-        //}
-
-        ////sobrescrita de método (OVERRIDE)
-        //public override Rota Obter(Func<Rota, bool> where)
-        //{
-        //    //retornar uma consulta de Rota 
-        //    //fazendo JOIN com a entidade Motorista
-        //    return dataContext.Rota
-        //            .Include(p => p.Motorista) //JOIN..
-        //            .Where(where)
-        //            .FirstOrDefault();
-        //}
-
-        ////sobrescrita de método (OVERRIDE)
         //public override Rota ObterPorId(int id)
         //{
         //    //retornar uma consulta de Rota 
         //    //fazendo JOIN com a entidade Motorista
         //    return dataContext.Rota
         //            .Include(p => p.Motorista) //JOIN..
-        //            .FirstOrDefault(p => p.CodRota == id);
+        //            .FirstOrDefault(p => p.Cod_Rota == id);
         //}
 
-        #endregion
+        
     }
 }
 

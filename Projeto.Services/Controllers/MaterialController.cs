@@ -19,15 +19,12 @@ namespace Projeto.Services.Controllers
     public class MaterialController : ControllerBase
     {
         //atributo
-        private readonly IMaterialRepository materialRepository;
-        private readonly IContratoRepository contratoRepository;
+        private readonly IMaterialRepository materialRepository;  
         private readonly IMapper mapper;
 
-        public MaterialController(IMaterialRepository materialRepository, IContratoRepository contratoRepository, IMapper mapper
-            )
+        public MaterialController(IMaterialRepository materialRepository, IMapper mapper)
         {
             this.materialRepository = materialRepository;
-            this.contratoRepository = contratoRepository;
             this.mapper = mapper;
         }
 
@@ -100,13 +97,12 @@ namespace Projeto.Services.Controllers
             try
             {
                 //buscar o Material referente ao id informado..
-                var material = materialRepository.ObterPorId(id);
-                var contrato = contratoRepository.Consultar().FirstOrDefault(c => c.Cod_Material ==id);
+                var material = materialRepository.ObterPorId(id);             
 
-                if (contrato != null)
-                {
-                    return StatusCode(403,$"O Material não pode ser excluído, pois está Associado  ao Contrato {contrato.Cod_Contrato}");
-                }
+                //if (contrato != null)
+                //{
+                //    return StatusCode(403,$"O Material não pode ser excluído, pois está Associado  ao Contrato {contrato.Cod_Contrato}");
+                //}
 
                 //verificar se o Material foi encontrado..
                 if (material != null)
@@ -124,7 +120,7 @@ namespace Projeto.Services.Controllers
                 }
                 else
                 {
-                    return BadRequest("Estoque não encontrado.");
+                    return BadRequest("Material não encontrado.");
                 }
             }
             catch (Exception e)

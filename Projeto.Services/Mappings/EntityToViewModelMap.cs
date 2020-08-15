@@ -36,7 +36,7 @@ namespace Projeto.Services.Mappings
             #endregion
 
             #region Configucacao
-            CreateMap<Configucacao, ConfigucacaoConsultaModel>();
+            CreateMap<Configuracao, ConfiguracaoConsultaModel>();
             #endregion
 
             #region Contrato

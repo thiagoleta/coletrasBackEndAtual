@@ -6,16 +6,9 @@ using System.Text;
 
 namespace Projeto.Data.Entities
 {
-   public class Configucacao
-    {
-		[Key]
-
-		#region PrimareKey
-		public int Cod_Configucacao { get; set; }
-		#endregion
-
-
-		#region KeyColumns
+   public class Configuracao
+	{	
+		public int Cod_Configuracao { get; set; }
 		public string Empresa { get; set; }
 		public string Numero_Inea { get; set; }
 		public string Logradouro { get; set; }
@@ -26,13 +19,7 @@ namespace Projeto.Data.Entities
 		public string CEP { get; set; }
 		public string UF { get; set; }
 		public string Telefones { get; set; }
-		#endregion
+        public bool Flag_Ativo { get; set; }
 
-		#region Associacao ForeignKey
-		#endregion
-
-		#region Associacao RefForeignKey
-		#endregion
-
-	}
+    }
 }

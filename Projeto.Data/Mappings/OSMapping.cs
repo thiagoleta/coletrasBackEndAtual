@@ -28,11 +28,12 @@ namespace Projeto.Data.Mappings
             builder.HasOne(o => o.MesReferencia).WithMany().HasForeignKey(o=> o.Cod_MesReferencia);
 
             builder.Property(c => c.Cod_Cliente);
-            builder.HasMany(c => c.Clientes).WithOne().HasForeignKey(c => c.Cod_Cliente);            
+            builder.HasMany(c => c.Clientes).WithOne().HasForeignKey(c => c.Cod_Cliente);
 
+            builder.Property(con => con.Cod_Configuracao);
+            builder.HasOne(con => con.Configuracao).WithMany().HasForeignKey(con => con.Cod_Configuracao);
 
             #endregion
-
 
 
         }

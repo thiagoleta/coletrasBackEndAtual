@@ -99,13 +99,13 @@ namespace Projeto.Services.Controllers
             {
                 var motorista = motoristaRepository.ObterPorId(id);
 
-                var rota = rotaRepository.Consultar().FirstOrDefault(m => m.Motorista.Cod_Motorista == id);
+                //var rota = rotaRepository.Consultar().FirstOrDefault(m => m.Motorista.Cod_Motorista == id);
 
-                if (rota != null)
-                {
-                    return StatusCode(403, $"O Motorista {motorista.Nome}  Não pode ser excluído, pois existe uma rota Associada.");
+                //if (rota != null)
+                //{
+                //    return StatusCode(403, $"O Motorista {motorista.Nome}  Não pode ser excluído, pois existe uma rota Associada.");
 
-                }
+                //}
 
                 if (motorista != null)
                 {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Projeto.Data.Contracts
 {
-   public interface IConfigucacaoRepository : IBaseRepository<Configucacao>
+   public interface IConfiguracaoRepository : IBaseRepository<Configuracao>
     {
 
     }

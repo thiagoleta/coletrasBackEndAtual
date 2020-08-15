@@ -27,7 +27,7 @@ namespace Projeto.Data.Context
             //adicionar cada classe de mapeamento (Mapping) feito no projeto
 	
             modelBuilder.ApplyConfiguration(new ClienteMapping());
-            modelBuilder.ApplyConfiguration(new ConfigucacaoMapping());
+            modelBuilder.ApplyConfiguration(new ConfiguracaoMapping());
             modelBuilder.ApplyConfiguration(new ContratoMapping());
             modelBuilder.ApplyConfiguration(new MaterialMapping());
             modelBuilder.ApplyConfiguration(new MesReferenciaMapping());
@@ -49,7 +49,7 @@ namespace Projeto.Data.Context
         //uma das entidades
 
         public DbSet<Cliente> Cliente { get; set; } //LAMBDA Functions
-        public DbSet<Configucacao> Configucacao { get; set; } //LAMBDA Functions
+        public DbSet<Configuracao> Configucacao { get; set; } //LAMBDA Functions
         public DbSet<Contrato> Contrato { get; set; } //LAMBDA Functions
         public DbSet<Material> Material { get; set; } //LAMBDA Functions
         public DbSet<MesReferencia> MesReferencia { get; set; } //LAMBDA Functions

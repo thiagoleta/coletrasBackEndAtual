@@ -23,15 +23,17 @@ namespace Projeto.Services.Controllers
         private readonly IOSRepository osRepository;
         private readonly IMesReferenciaRepository mesRepository;
         private readonly IContratoRepository contratoRepository;
-        private readonly IClienteRepository ClienteRepository;
+        private readonly IClienteRepository clienteRepository;
+        private readonly IConfiguracaoRepository configuracaoRepository;
         private readonly IMapper mapper;
 
-        public OSController(IOSRepository osRepository, IMesReferenciaRepository mesRepository, IContratoRepository contratoRepository, IClienteRepository clienteRepository, IMapper mapper)
+        public OSController(IOSRepository osRepository, IMesReferenciaRepository mesRepository, IContratoRepository contratoRepository, IClienteRepository clienteRepository, IConfiguracaoRepository configuracaoRepository, IMapper mapper)
         {
             this.osRepository = osRepository;
             this.mesRepository = mesRepository;
             this.contratoRepository = contratoRepository;
-            ClienteRepository = clienteRepository;
+            this.clienteRepository = clienteRepository;
+            this.configuracaoRepository = configuracaoRepository;
             this.mapper = mapper;
         }
 
@@ -48,13 +50,8 @@ namespace Projeto.Services.Controllers
                     {
                         foreach (var itens in model.Clientes)
                         {
-
-                            var cliente = new Cliente();
-
-
                             var contratoAtivo = contratoRepository.Consultar()
-                            .FirstOrDefault(co => co.Cod_Cliente.Equals(itens.Cod_Cliente)
-                            && co.Flag_Termino.Equals(false));
+                            .FirstOrDefault(co => co.Cod_Cliente.Equals(itens.Cod_Cliente) && co.Flag_Termino.Equals(false));
 
                             if (contratoAtivo != null)
                             {
@@ -72,16 +69,26 @@ namespace Projeto.Services.Controllers
                                 os.Flag_Cancelado = false;
                                 os.Motivo_Cancelamento = null;
                                 os.Data_Cancelamento = null;
+                                
 
                                 var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
 
-                                if (MesRef == null)
+                                if (MesRef is null )
                                 {
                                     return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
                                 }
 
                                 os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
-                                osRepository.Inserir(os);
+                               
+
+                                var configuracao = configuracaoRepository.Consultar().FirstOrDefault(c=> c.Flag_Ativo.Equals(true));                     
+
+                                if (configuracao is null)
+                                {
+                                    return StatusCode(403, $"Não existe confuguração padrão ativa para geração da OS.");
+                                }
+                                os.Cod_Configuracao = configuracao.Cod_Configuracao;
+                                osRepository.Inserir(os);                               
 
                             }
                             else
@@ -97,13 +104,7 @@ namespace Projeto.Services.Controllers
                     }
 
 
-
-                    var result = new
-                    {
-                        message = "OS cadastrada com sucesso",                        
-                    };
-
-                    return Ok(result);
+                    return Ok("OS cadastrada com sucesso");
                 }
                 catch (Exception e)
                 {

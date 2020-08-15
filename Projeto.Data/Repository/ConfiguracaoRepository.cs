@@ -9,11 +9,11 @@ using System.Text;
 
 namespace Projeto.Data.Repository
 {
-   public class ConfigucacaoRepository : BaseRepository<Configucacao>, IConfigucacaoRepository
+   public class ConfiguracaoRepository : BaseRepository<Configuracao>, IConfiguracaoRepository
     {
         private readonly DataColetrans dataContext;
 
-        public ConfigucacaoRepository(DataColetrans dataContext) : base(dataContext) //construtor da classe pai..
+        public ConfiguracaoRepository(DataColetrans dataContext) : base(dataContext) //construtor da classe pai..
         {
             this.dataContext = dataContext;
         }

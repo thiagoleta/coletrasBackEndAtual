@@ -20,12 +20,10 @@ namespace Projeto.Services.Models.Contrato
         public bool Flag_Ativo { get; set; }
         public bool Flag_Cancelado { get; set; }
         public string Motivo_Cancelamento { get; set; }
-        public DateTime Data_Cancelamento { get; set; }
+        public DateTime? Data_Cancelamento { get; set; }
         public bool Flag_Termino { get; set; }
         public DateTime Data_Inicio { get; set; }
-        public DateTime Data_Termino { get; set; }        
-
-        public MaterialConsultaModel Material { get; set; }
+        public DateTime? Data_Termino { get; set; }      
         public ClienteConsultaModel Cliente { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace Projeto.Services
             services.AddTransient<IMotoristaRepository, MotoristaRepository>();
             services.AddTransient<IRotaRepository, RotaRepository>();
             services.AddTransient<IClienteRepository, ClienteRepository>();
-            services.AddTransient<IConfigucacaoRepository, ConfigucacaoRepository>();
+            services.AddTransient<IConfiguracaoRepository, ConfiguracaoRepository>();
             services.AddTransient<IContratoRepository, ContratoRepository>();
             services.AddTransient<IMaterialRepository, MaterialRepository>();
             services.AddTransient<IMesReferenciaRepository, MesReferenciaRepository>();

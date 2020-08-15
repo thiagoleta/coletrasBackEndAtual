@@ -12,7 +12,7 @@ namespace Projeto.Data.Entities
         public int Cod_Dia { get; set; }
         public int Cod_Rota { get; set; }
         public int Cod_Motorista { get; set; }
-        public int Cod_Material { get; set; }
+        public int? Cod_Material { get; set; }
 
         public Cliente Cliente { get; set; }
         public Turno Turno { get; set; }

@@ -7,31 +7,17 @@ using System.Text;
 namespace Projeto.Data.Entities
 {
    public class MesReferencia
-    {
-		[Key]
-
-		#region PrimareKey
-		public int Cod_MesReferencia { get; set; }
-		#endregion
-
-
-		#region KeyColumns
+    {	
+		
+		public int Cod_MesReferencia { get; set; }	
+		
 		public string Codigo { get; set; }
 		public int Mes { get; set; }
 		public int Ano { get; set; }
 		public DateTime Data_Inicio { get; set; }
 		public DateTime? Data_Termino { get; set; }
 		public bool Flag_Encerramento { get; set; }
-		public DateTime? Data_Encerramento { get; set; }
-		#endregion
-
-		#region Associacao ForeignKey
-		//public List<Pagamento> Pagamento { get; set; }
-		//public List<OS> OS { get; set; }
-		#endregion
-
-		#region Associacao RefForeignKey
-		#endregion
-
+		public DateTime? Data_Encerramento { get; set; }	
+			
 	}
 }

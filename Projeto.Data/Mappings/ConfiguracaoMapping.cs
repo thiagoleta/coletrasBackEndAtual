@@ -7,22 +7,19 @@ using System.Text;
 
 namespace Projeto.Data.Mappings
 {
-    public class ConfigucacaoMapping : IEntityTypeConfiguration<Configucacao>
+    public class ConfiguracaoMapping : IEntityTypeConfiguration<Configuracao>
     {
-        public void Configure(EntityTypeBuilder<Configucacao> builder)
+        public void Configure(EntityTypeBuilder<Configuracao> builder)
         {
             //nome da tabela no banco de dados (opcional)
-            builder.ToTable("Configucacao");
+            builder.ToTable("Configuracao");
 
             //chave primA?ria da tabela
             //para o EF, todo campo int que for definido como chave primA?ria
             //jA? A© criado como identity (auto-incremento)
-            builder.HasKey(c => c.Cod_Configucacao);
+            builder.HasKey(c => c.Cod_Configuracao);
 
-            #region Mapeamento dos Relacionamentos
-
-
-            #endregion
+       
 
 
 

@@ -108,7 +108,7 @@ namespace Projeto.Services.Controllers
 
                     var result = new
                     {
-                        message = "Estoque excluído com sucesso.",
+                        message = "Rota excluída com sucesso.",
                         rota
                     };
 
@@ -116,7 +116,7 @@ namespace Projeto.Services.Controllers
                 }
                 else
                 {
-                    return BadRequest("Estoque não encontrado.");
+                    return BadRequest("Rota não encontrada.");
                 }
             }
             catch (Exception e)

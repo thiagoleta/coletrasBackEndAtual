@@ -8,14 +8,10 @@ namespace Projeto.Data.Entities
 {
    public class OS
     {
-		[Key]
 
-		#region PrimareKey
-		public int Cod_OS { get; set; }
-		#endregion
-
-
-		#region KeyColumns
+		
+		public int Cod_OS { get; set; }	
+		
 		public DateTime Data_Geracao { get; set; }
 		public int Quantidade_Coletada { get; set; }
 		public DateTime? Data_Coleta { get; set; }
@@ -25,11 +21,7 @@ namespace Projeto.Data.Entities
 		public string Motivo_Cancelamento { get; set; }
 		public DateTime? Data_Cancelamento { get; set; }
 		
-		#endregion
-
-		#region Associacao ForeignKey
-		#endregion
-
+		
 		#region Associacao RefForeignKey
 		
 		public int Cod_MesReferencia { get; set; }
@@ -40,6 +32,9 @@ namespace Projeto.Data.Entities
 
         public List<Cliente>  Clientes { get; set; }
         public int Cod_Cliente { get; set; }
+
+		public Configuracao Configuracao { get; set; }
+		public int Cod_Configuracao { get; set; }
 		#endregion
 
 	}

@@ -16,28 +16,28 @@ namespace Projeto.Services.Controllers
     [Authorize("Bearer")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ConfigucacaoController : ControllerBase
+    public class ConfiguracaoController : ControllerBase
     {
         //atributo
-        private readonly IConfigucacaoRepository configucacaoRepository;
+        private readonly IConfiguracaoRepository configuracaoRepository;
         private readonly IMapper mapper;
 
-        public ConfigucacaoController(IConfigucacaoRepository configucacaoRepository, IMapper mapper)
+        public ConfiguracaoController(IConfiguracaoRepository configuracaoRepository, IMapper mapper)
         {
-            this.configucacaoRepository = configucacaoRepository;
+            this.configuracaoRepository = configuracaoRepository;
             this.mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult Post(ConfigucacaoCadastroModel model)
+        public IActionResult Post(ConfiguracaoCadastroModel model)
         {
             //verificando se os campos da model passaram nas validações
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var configucacao = mapper.Map<Configucacao>(model);
-                    configucacaoRepository.Inserir(configucacao);
+                    var configucacao = mapper.Map<Configuracao>(model);
+                    configuracaoRepository.Inserir(configucacao);
 
                     var result = new
                     {
@@ -60,15 +60,15 @@ namespace Projeto.Services.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(ConfigucacaoEdicaoModel model)
+        public IActionResult Put(ConfiguracaoEdicaoModel model)
         {
             //verificando se os campos da model passaram nas validações
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var configucacao = mapper.Map<Configucacao>(model);
-                    configucacaoRepository.Alterar(configucacao);
+                    var configucacao = mapper.Map<Configuracao>(model);
+                    configuracaoRepository.Alterar(configucacao);
 
                     var result = new
                     {
@@ -97,13 +97,13 @@ namespace Projeto.Services.Controllers
             try
             {
                 //buscar o Configucacao referente ao id informado..
-                var configucacao = configucacaoRepository.ObterPorId(id);
+                var configucacao = configuracaoRepository.ObterPorId(id);
 
                 //verificar se o Configucacao foi encontrado..
                 if (configucacao != null)
                 {
                     //excluindo o Configucacao
-                    configucacaoRepository.Excluir(configucacao);
+                    configuracaoRepository.Excluir(configucacao);
 
                     var result = new
                     {
@@ -125,12 +125,12 @@ namespace Projeto.Services.Controllers
         }
 
         [HttpGet]
-        [Produces(typeof(List<ConfigucacaoConsultaModel>))]
+        [Produces(typeof(List<ConfiguracaoConsultaModel>))]
         public IActionResult GetAll()
         {
             try
             {
-                var result = configucacaoRepository.Consultar();
+                var result = configuracaoRepository.Consultar();
                 return Ok(result);
             }
             catch (Exception e)
@@ -140,12 +140,12 @@ namespace Projeto.Services.Controllers
         }
 
         [HttpGet("{id}")]
-        [Produces(typeof(ConfigucacaoConsultaModel))]
+        [Produces(typeof(ConfiguracaoConsultaModel))]
         public IActionResult GetById(int id)
         {
             try
             {
-                var result = configucacaoRepository.ObterPorId(id);
+                var result = configuracaoRepository.ObterPorId(id);
 
                 if (result != null) //se o Configucacao foi encontrado..
                 {

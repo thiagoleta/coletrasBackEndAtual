@@ -20,16 +20,14 @@ namespace Projeto.Data.Repository
 
         public override List<Contrato> Consultar()
         {
-            return dataContext.Contrato
-                .Include(m => m.Material)
+            return dataContext.Contrato              
                 .Include(c => c.Cliente)
                 .ToList();
         }
 
         public override Contrato ObterPorId(int id)
         {
-            return dataContext.Contrato
-                .Include(m => m.Material)
+            return dataContext.Contrato               
                 .Include(c => c.Cliente)
                 .FirstOrDefault(con => con.Cod_Contrato == id );
         }

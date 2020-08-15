@@ -8,12 +8,10 @@ namespace Projeto.Services.Models.Rota
 {
     public class RotaConsultaModel
     {
-        public int Cod_Rota { get; set; }
-        public int Cod_Motorista { get; set; }
+        public int Cod_Rota { get; set; }      
         public string Nome { get; set; }
         public string Composicao_Rota { get; set; }
         public bool Flag_Ativo { get; set; }
-        public string Observacao { get; set; }
-        public MotoristaConsultaModel Motorista { get; set; }
+        public string Observacao { get; set; }      
     }
 }

@@ -35,8 +35,8 @@ namespace Projeto.Services.Mappings
             CreateMap<ClienteCadastroModel, Cliente>();
             CreateMap<ClienteEdicaoModel, Cliente>();
 
-            CreateMap<ConfigucacaoCadastroModel, Configucacao>();
-            CreateMap<ConfigucacaoEdicaoModel, Configucacao>();
+            CreateMap<ConfiguracaoCadastroModel, Configuracao>();
+            CreateMap<ConfiguracaoEdicaoModel, Configuracao>();
 
             CreateMap<ContratoCadastroModel, Contrato>();
             CreateMap<ContratoEdicaoModel, Contrato>();
