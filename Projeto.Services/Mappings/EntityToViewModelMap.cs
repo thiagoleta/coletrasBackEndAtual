@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Projeto.Services.Models.Roteiro;
+using Projeto.Services.Models.DiasSemana;
 
 namespace Projeto.Services.Mappings
 {
@@ -59,7 +60,10 @@ namespace Projeto.Services.Mappings
             CreateMap<Pagamento, PagamentoConsultaModel>();
             #endregion
 
-            
+            #region DiasColeta
+            CreateMap<Dias_Coleta, DiaColetaConsultaModel>();
+            #endregion
+
 
 
 

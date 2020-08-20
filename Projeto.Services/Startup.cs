@@ -75,6 +75,7 @@ namespace Projeto.Services
             services.AddTransient<IPerfilRepository, PerfilRepository>();
             services.AddTransient<IRoteiroRepository, RoteiroRepository>();
             services.AddTransient<ITurnoRepository, TurnoRepository>();
+            
 
             #endregion
 

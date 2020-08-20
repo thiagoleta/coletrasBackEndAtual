@@ -54,10 +54,10 @@ namespace Projeto.Services.Controllers
 
                     if (model.Clientes != null)
                     {
-                        foreach (var itens in model.Clientes)
+                        foreach (var cliente in model.Clientes)
                         {
                             var contratoAtivo = contratoRepository.Consultar()
-                            .FirstOrDefault(co => co.Cod_Cliente.Equals(itens.Cod_Cliente) && co.Flag_Termino.Equals(false));
+                            .FirstOrDefault(co => co.Cod_Cliente.Equals(cliente.Cod_Cliente) && co.Flag_Termino.Equals(false));
 
                             if (contratoAtivo != null)
                             {
@@ -65,16 +65,11 @@ namespace Projeto.Services.Controllers
                                 var os = new OS();
 
                                 os.Cod_Contrato = contratoAtivo.Cod_Contrato;
-                                os.Cod_Cliente = itens.Cod_Cliente;
-                                os.Data_Geracao = DateTime.Now;
-                                os.Data_Coleta = null;
-                                os.Flag_Ativo = true;
-                                os.Flag_Cancelado = false;
-                                os.Quantidade_Coletada = 0;
-                                os.Flag_Coleta = false;
-                                os.Flag_Cancelado = false;
-                                os.Motivo_Cancelamento = null;
-                                os.Data_Cancelamento = null;
+                                os.Valor_Limite = contratoAtivo.Valor_Limite;
+                                os.Coleta_Contratada = contratoAtivo.Coleta_Contratada;
+                                os.Valor_Unidade = contratoAtivo.Valor_Unidade;
+                                os.Cod_Cliente = cliente.Cod_Cliente;                                
+                                os.Data_Geracao = DateTime.Now;                          
                                 
 
                                 var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
@@ -94,12 +89,13 @@ namespace Projeto.Services.Controllers
                                     return StatusCode(403, $"Não existe confuguração padrão ativa para geração da OS.");
                                 }
                                 os.Cod_Configuracao = configuracao.Cod_Configuracao;
-                                osRepository.Inserir(os);                               
+                                osRepository.Inserir(os);
+                      
 
                             }
                             else
                             {
-                                return StatusCode(403, $"Não existe contrato Ativo para o {itens.Cod_Cliente}.");
+                                return StatusCode(403, $"Não existe contrato Ativo para o {cliente.Cod_Cliente}.");
                             }
                         }
                     }
@@ -230,7 +226,7 @@ namespace Projeto.Services.Controllers
 
         private void EnviarEmailDeBoasVindas(Cliente cliente)
         {
-            var assunto = "Conta de Usuário criada com sucesso- COTI INFORMÁTICA";
+            var assunto = "Guia de OS - Coletrans";
             var texto = new StringBuilder();
 
             texto.Append($"Olá, {cliente.NomeCompleto_RazaoSocial}\n\n");

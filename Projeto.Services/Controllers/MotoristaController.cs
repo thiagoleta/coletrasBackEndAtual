@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
@@ -15,6 +16,7 @@ using Projeto.Services.Models.Motorista;
 namespace Projeto.Services.Controllers
 {
     [Authorize("Bearer")]
+    [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class MotoristaController : ControllerBase

@@ -19,7 +19,10 @@ namespace Projeto.Data.Entities
 		public string Complemento { get; set; }
 		public string Cidade { get; set; }
 		public string CEP { get; set; }
-		public string UF { get; set; }
+
+		public string UF { get; set; }	
+
+
 		public string Telefones { get; set; }
 		public string Funcao { get; set; }
 		public string Email { get; set; }

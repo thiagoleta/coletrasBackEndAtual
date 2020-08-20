@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Data.Contracts;
@@ -12,8 +13,8 @@ using Projeto.Services.Models.Roteiro;
 
 namespace Projeto.Services.Controllers
 {
-    
     [Authorize("Bearer")]
+    [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class RoteiroController : ControllerBase

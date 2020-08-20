@@ -40,6 +40,7 @@ namespace Projeto.Data.Context
             modelBuilder.ApplyConfiguration(new Dias_ColetaMapping());
             modelBuilder.ApplyConfiguration(new PerfilMapping());
             modelBuilder.ApplyConfiguration(new UsuarioMapping());
+            
 
         }
 
@@ -62,6 +63,7 @@ namespace Projeto.Data.Context
         public DbSet<Dias_Coleta> Dias_Coleta { get; set; } //LAMBDA Functions
         public DbSet<Perfil> Perfil { get; set; } //LAMBDA Functions
         public DbSet<Usuario> Usuario { get; set; } //LAMBDA Functions
+        
 
     }
 

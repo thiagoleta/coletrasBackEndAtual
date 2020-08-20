@@ -8,5 +8,6 @@ namespace Projeto.Services.Models.Cliente
     public class ClienteOSModel
     {
         public int Cod_Cliente { get; set; }
+        
     }
 }
