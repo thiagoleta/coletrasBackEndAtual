@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
 using Projeto.Data.Repository;
@@ -62,15 +63,21 @@ namespace Projeto.Services.Controllers
                             if (contratoAtivo != null)
                             {
 
-                                var os = new OS();
-
+                                var os = new OS();                                
+                                os.Endereco_Cliente = cliente.Endereco;
+                                os.NomeCompleto_RazaoSocial_Cliente = cliente.NomeCompleto_RazaoSocial;
+                                os.Email_Cliente = cliente.Email;
                                 os.Cod_Contrato = contratoAtivo.Cod_Contrato;
                                 os.Valor_Limite = contratoAtivo.Valor_Limite;
                                 os.Coleta_Contratada = contratoAtivo.Coleta_Contratada;
                                 os.Valor_Unidade = contratoAtivo.Valor_Unidade;
-                                os.Cod_Cliente = cliente.Cod_Cliente;                                
-                                os.Data_Geracao = DateTime.Now;                          
-                                
+                                os.Cod_Cliente = cliente.Cod_Cliente;
+
+                                System.Globalization.CultureInfo brasil = new System.Globalization.CultureInfo("pt-BR");
+                                String dataBr = DateTime.Now.ToString(brasil);     
+                                var dt = DateTime.Parse(dataBr);                            
+
+                                os.Data_Geracao = dt;
 
                                 var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
 
@@ -79,18 +86,42 @@ namespace Projeto.Services.Controllers
                                     return StatusCode(403, $"Não existe Mês referência aberto para cadastro da OS, favor cadastrar o Mês Referência");
                                 }
 
+                                string nomeMotorista = "thiago";
+                                string recebido = "thiago";
+                                string material = "thiago";
+                                int quatidadeColeta = 2;
+                                string email  = "thiagoleta2013@gmail.com";
                                 os.Cod_MesReferencia = MesRef.Cod_MesReferencia;
-                               
-
-                                var configuracao = configuracaoRepository.Consultar().FirstOrDefault(c=> c.Flag_Ativo.Equals(true));                     
-
-                                if (configuracao is null)
-                                {
-                                    return StatusCode(403, $"Não existe confuguração padrão ativa para geração da OS.");
-                                }
-                                os.Cod_Configuracao = configuracao.Cod_Configuracao;
                                 osRepository.Inserir(os);
-                      
+                                EnviarEmailOs( os.NomeCompleto_RazaoSocial_Cliente,
+                                                os.Endereco_Cliente,
+                                                os.Data_Geracao,
+                                                os.Hora_Entrada,
+                                                os.Hora_Saida, 
+                                                nomeMotorista,
+                                                recebido,
+                                                material,
+                                                 quatidadeColeta, os.Placa, email);
+
+                                //var configuracao = configuracaoRepository.Consultar().FirstOrDefault(c => c.Flag_Ativo.Equals(true));
+
+                                //if (configuracao is null)
+                                //{
+                                //    return StatusCode(403, $"Não existe confuguração padrão ativa para geração da OS.");
+                                //}
+
+                                //os.Empresa_Config = configuracao.Empresa;
+                                //var enderecoCompleto = string.Format("{0} - {1} - {2}. ", configuracao.Endereco, configuracao.Bairro, configuracao.Cidade);
+                                //os.Endereco_Completo_Config = enderecoCompleto;
+                                //var telefones = ($"Telefone : {configuracao.Telefones}");
+                                //os.Telefones_Config = telefones;
+                                //var CNPJ = ($"CNPJ : {configuracao.CNPJ}");
+                                //os.CNPJ_Config = CNPJ;
+                                //os.Inscr_Municipal_Config = configuracao.Inscr_Municipal;
+                                //os.Numero_Inea_Config = configuracao.Numero_Inea;                              
+                                //os.Cod_Configuracao = configuracao.Cod_Configuracao;
+
+
 
                             }
                             else
@@ -210,6 +241,39 @@ namespace Projeto.Services.Controllers
 
                 if (result != null) //se o OS foi encontrado..
                 {
+                    //var configuracao = configuracaoRepository.Consultar().FirstOrDefault(c => c.Flag_Ativo.Equals(true));
+
+                    //if (configuracao !=null)
+                    //{
+                    //    result.Empresa_Config = configuracao.Empresa;
+
+                    //    var enderecoCompleto = string.Format("{0} - {1} - {2}. ", configuracao.Endereco, configuracao.Bairro, configuracao.Cidade);
+
+                    //    result.Endereco_Completo_Config = enderecoCompleto;
+
+                    //    var telefones = ($"Telefone : {configuracao.Telefones}");
+                    //    result.Telefones_Config = telefones;
+
+                    //    var CNPJ = ($"CNPJ : {configuracao.CNPJ}");
+                    //    result.CNPJ_Config = CNPJ;
+
+                    //    result.Inscr_Municipal_Config = configuracao.Inscr_Municipal;
+                    //    result.Numero_Inea_Config = configuracao.Numero_Inea;
+                    //}
+
+                    //var cliente = clienteRepository.Consultar().FirstOrDefault(c=> c.Cod_Cliente == result.Cod_Cliente);
+
+                    //if (cliente != null)
+                    //{
+                    //    result.NomeCompleto_RazaoSocial_Cliente = cliente.NomeCompleto_RazaoSocial;
+                    //    result.Endereco_Cliente = cliente.Endereco;
+                    //}
+
+
+                    //var gravarConfiguracao = osRepository.Alterar(result);
+                    
+                    
+                    
                     return Ok(result);
                 }
                 else
@@ -224,19 +288,55 @@ namespace Projeto.Services.Controllers
             }
         }
 
-        private void EnviarEmailDeBoasVindas(Cliente cliente)
+        private void EnviarEmailOs(string NomeCompletoRazaoSocialCliente,
+                                                string EnderecoCliente, DateTime DataColeta,
+                                                string horaEntrada, string horaSaida, string nomeMotorista,
+                                                string recebido, string material, int quatidadeColeta, string placa, string emailCliente)
         {
             var assunto = "Guia de OS - Coletrans";
-            var texto = new StringBuilder();
 
-            texto.Append($"Olá, {cliente.NomeCompleto_RazaoSocial}\n\n");
-            texto.Append($"Sua conta de usuário foi criada com sucesso!\n");
-            texto.Append($"Faça seu login para ter acesso ao sistema.");
-            texto.Append($"\n\n");
-            texto.Append($"Atenciosamente,\n");
-            texto.Append($"Equipe COTI Informática");
 
-            mailService.SendMail(cliente.Email, assunto, texto.ToString());
+            StringBuilder corpoemail = new StringBuilder();
+            corpoemail.AppendLine("<p><strong><&nbsp; Coletrans</strong></p>");
+            corpoemail.AppendLine("<p style='text-align: center;'>&nbsp;</p>");
+            corpoemail.AppendLine("<p style='text-align: center;'><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Rua Ari Barroso, n&ordm;. 294 - Parque Beira Mar - Duque de Caxias - RJ.</strong></p>");
+            corpoemail.AppendLine("<p style='text-align: center;'><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Telefone : (21) 2771-4487 (21) 97576-7024</strong></p>");
+            corpoemail.AppendLine("<p style='text-align: center;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;CNPJ : 06697682/0002-09- Inscr. Mun 780148-3 LO IN INEA02198</p>");
+            corpoemail.AppendLine("<p style='text-align: center;'>&nbsp;&nbsp;</p>");
+            corpoemail.AppendLine("<table style='height: 172px; margin-left: auto; margin-right: auto;' border='1' width='620' cellspacing='1'>");
+            corpoemail.AppendLine("<tbody>");
+            corpoemail.AppendLine("<tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>&Aacute; servi&ccedil;o de : {NomeCompletoRazaoSocialCliente} </td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("<tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>Endere&ccedil;o : {EnderecoCliente} </td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("<tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>Data:&nbsp; {DataColeta}</td>");
+            corpoemail.AppendLine($"<td style='width: 307px;'>Placa : {placa}</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>Motorista : {nomeMotorista}</td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("<td style='width: 297px;'>Recebido :</td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("<tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>Material : {material}</td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("<tr>");
+            corpoemail.AppendLine($"<td style='width: 297px;'>Quanditade de Coleta : {quatidadeColeta}</td>");
+            corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");
+            corpoemail.AppendLine("</tr>");
+            corpoemail.AppendLine("</tbody>");
+            corpoemail.AppendLine("/table>");
+
+            //string Body = System.IO.File.ReadAllText(@"C:\Users\thiago.leta\Desktop\Nova pasta\OS.html");
+
+            mailService.SendMail(emailCliente, assunto, corpoemail.ToString());
         }
 
     }

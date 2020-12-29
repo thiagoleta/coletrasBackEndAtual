@@ -1,173 +1,110 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
-using Projeto.Data.Repository;
 using Projeto.Services.Models.Material;
+using Projeto.Data.Extensions;
+using Projeto.Data.Seedwork;
+using Projeto.Data.ValueObjects;
+using Projeto.Data.Repository.Sorts;
+using System.Text;
+using System.Linq;
+using Projeto.Data.Services;
+using Projeto.Data.Commands;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class MaterialController : ControllerBase
+    public class MaterialController : ApiControllerBase
     {
         //atributo
-        private readonly IMaterialRepository materialRepository;  
-        private readonly IMapper mapper;
+        private readonly IMaterialRepository materialRepository;
 
-        public MaterialController(IMaterialRepository materialRepository, IMapper mapper)
+        public MaterialController(IMaterialRepository materialRepository)
         {
             this.materialRepository = materialRepository;
-            this.mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult Post(MaterialCadastroModel model)
+        public IActionResult Criar(
+                [FromServices] IMaterialService service,
+                [FromBody] CriarMaterialCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var material = mapper.Map<Material>(model);
-                    materialRepository.Inserir(material);
-
-                    var result = new
-                    {
-                        message = "Material cadastrado com sucesso", 
-                        	material
-                    };
-
-                    return StatusCode(200, $"Material cadastrado com sucesso"); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
+
 
         [HttpPut]
-        public IActionResult Put(MaterialEdicaoModel model)
+        public IActionResult Atualizar(
+                [FromServices] IMaterialService service,
+                [FromBody] AtualizarMaterialCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var material = mapper.Map<Material>(model);
-                    materialRepository.Alterar(material);
-
-                    var result = new
-                    {
-                        message = "Material atualizado com sucesso",
-                        	material
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Atualizar(command));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        
+
+        [HttpDelete("{cod_Material}")]
+        public IActionResult Remover(
+             [FromServices] IMaterialService service,
+              [FromRoute] int cod_Material)
         {
-
-            try
-            {
-                //buscar o Material referente ao id informado..
-                var material = materialRepository.ObterPorId(id);             
-
-                //if (contrato != null)
-                //{
-                //    return StatusCode(403,$"O Material não pode ser excluído, pois está Associado  ao Contrato {contrato.Cod_Contrato}");
-                //}
-
-                //verificar se o Material foi encontrado..
-                if (material != null)
-                {
-                    //excluindo o Material
-                    materialRepository.Excluir(material);
-
-                    var result = new
-                    {
-                        message = "Material excluído com sucesso.",
-                        	material
-                    };
-
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest("Material não encontrado.");
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(service.Remover(cod_Material));
         }
+
 
         [HttpGet]
-        [Produces(typeof(List<MaterialConsultaModel>))]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado(
+             [FromServices] IMaterialRepository materialRepository,
+             [FromQuery] int pagina, [FromQuery] int quantidade,
+             [FromQuery] string coluna = "descricao",
+             [FromQuery] string direcao = "asc",
+             [FromQuery] string descricao = null
+             )
         {
-            try
-            {
-                var result = materialRepository.Consultar();
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(materialRepository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, MaterialSort.Descricao),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(descricao)));
         }
 
-        [HttpGet("{id}")]
-        [Produces(typeof(MaterialConsultaModel))]
-        public IActionResult GetById(int id)
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IMaterialRepository repository,
+           [FromQuery] string coluna = "descricao", 
+           [FromQuery] string direcao = "asc", 
+           [FromQuery] string descricao = null)
         {
-            try
-            {
-                var result = materialRepository.ObterPorId(id);
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, MaterialSort.Descricao),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(descricao));
 
-                if (result != null) //se o Material foi encontrado..
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent(); //HTTP 204 (SUCESSO -> Vazio)
-                }
-            }
-
-            catch (Exception e)
+            if (resultado.Tipo == ResultType.Valid)
             {
-                return StatusCode(500, "Erro: " + e.Message);
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("COD_MATERIAL;DESCRIÇÃO; VOLUME; OBSERVAÇÃO; MATERIAL COLETADO");
+
+                foreach (var x in resultado.Dados)
+                {
+
+                    csv.Append($"\"{x.Cod_Material}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Descricao) ? x.Descricao : string.Empty)}\";");
+                    csv.Append($"\"{(x.Volume != null ? x.Volume.ToString() : "")}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Observacao) ? x.Observacao : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Material_Coletado) ? x.Material_Coletado : string.Empty)}\";");
+                    csv.AppendLine("");
+                }
+
+                string nomeArquivo = $"Material{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
+            return Result(resultado);
         }
     }
 }

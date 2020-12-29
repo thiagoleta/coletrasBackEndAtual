@@ -11,22 +11,18 @@ namespace Projeto.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Material> builder)
         {
-            //nome da tabela no banco de dados (opcional)
-            builder.ToTable("Material");
-
-            //chave primA?ria da tabela
-            //para o EF, todo campo int que for definido como chave primA?ria
-            //jA? A© criado como identity (auto-incremento)
+            
+            builder.ToTable("Material");           
             builder.HasKey(m => m.Cod_Material);
 
-            #region Mapeamento dos Relacionamentos
+            builder.Property(m => m.Cod_Material).HasColumnName("Cod_Material").IsRequired();
 
-
-            #endregion
-
-
-
-        }
+            builder.Property(m => m.Descricao).HasColumnName("Descricao");
+            builder.Property(m => m.Volume).HasColumnName("Volume");
+            builder.Property(m => m.Observacao).HasColumnName("Observacao");
+            builder.Property(m => m.Material_Coletado).HasColumnName("Material_Coletado");
+     
+    }
 
     }
 }

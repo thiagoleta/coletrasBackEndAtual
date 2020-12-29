@@ -22,10 +22,9 @@ namespace Projeto.Data.Entities
 		public List<Cliente> Clientes { get; set; }
 		public int Cod_Cliente { get; set; }
 		public Configuracao Configuracao { get; set; }
-		public int Cod_Configuracao { get; set; }
+		public int? Cod_Configuracao { get; set; }
 		public int Cod_Contrato { get; set; }
 		public Contrato Contrato { get; set; }
-
 
 		public int Cod_MesReferencia { get; set; }
 		public MesReferencia MesReferencia { get; set; }
@@ -36,11 +35,11 @@ namespace Projeto.Data.Entities
 		public string Placa { get; set; }
 		public string Endereco_Cliente { get; set; }
 		public string NomeCompleto_RazaoSocial_Cliente { get; set; }
-		public string Fantasia_Cliente { get; set; }
+		
 		public int? Coleta_Contratada { get; set; }
 		public decimal? Valor_Limite { get; set; }
 		public decimal? Valor_Unidade { get; set; }
 
 
-	}
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -8,22 +9,27 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
+using Projeto.Data.Commands;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
+using Projeto.Data.Extensions;
 using Projeto.Data.Repository;
+using Projeto.Data.Repository.Sorts;
+using Projeto.Data.Seedwork;
+using Projeto.Data.Services;
+using Projeto.Data.ValueObjects;
 using Projeto.Services.Models.Motorista;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class MotoristaController : ControllerBase
+    public class MotoristaController : ApiControllerBase
     {
-
-
-        //atributo
+      
         private readonly IMotoristaRepository motoristaRepository;
         private readonly IRotaRepository rotaRepository;
         private readonly IMapper mapper;
@@ -34,141 +40,81 @@ namespace Projeto.Services.Controllers
             this.rotaRepository = rotaRepository;
             this.mapper = mapper;
         }
+            
 
         [HttpPost]
-        public IActionResult Post(MotoristaCadastroModel model)
+        public IActionResult Criar(
+         [FromServices] IMotoristaService service,
+         [FromBody] CriarMotoristaCommand command)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var motorista = mapper.Map<Motorista>(model);
-                    motoristaRepository.Inserir(motorista);
-
-                    var result = new
-                    {
-                        message = "Motorista cadastrado com sucesso.",
-                        motorista
-                    };
-
-                    return Ok(result);
-                }
-
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
+
+      
 
         [HttpPut]
-        public IActionResult Put(MotoristaEdicaoModel model)
+        public IActionResult Atualizar(
+         [FromServices] IMotoristaService service,
+         [FromBody] AtualizarMotoristaCommand command)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var motorista = mapper.Map<Motorista>(model);
-                    motoristaRepository.Alterar(motorista);
-
-                    var result = new
-                    {
-                        message = "Motorista atualizado com sucesso.",
-                        motorista
-                    };
-
-                    return Ok(result);
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Atualizar(command));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        [HttpDelete("{cod_Motorista}")]
+        public IActionResult Remover(
+     [FromServices] IMotoristaService service,
+      [FromRoute] int cod_Motorista)
         {
-            try
-            {
-                var motorista = motoristaRepository.ObterPorId(id);
+            return Result(service.Remover(cod_Motorista));
+        }    
 
-                //var rota = rotaRepository.Consultar().FirstOrDefault(m => m.Motorista.Cod_Motorista == id);
-
-                //if (rota != null)
-                //{
-                //    return StatusCode(403, $"O Motorista {motorista.Nome}  Não pode ser excluído, pois existe uma rota Associada.");
-
-                //}
-
-                if (motorista != null)
-                {
-                    motoristaRepository.Excluir(motorista);
-
-                    var result = new
-                    {
-                        message = "Motorista excluído com sucesso.",
-                        motorista
-                    };
-
-                    return Ok(result);
-                }
-
-                else
-                {
-                    return BadRequest("Motorista não encontrado.");
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
-        }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado(
+         [FromServices] IMotoristaRepository motoristaRepository,
+         [FromQuery] int pagina, [FromQuery] int quantidade,
+         [FromQuery] string coluna = "nome",
+         [FromQuery] string direcao = "asc",
+         [FromQuery] string nome = null
+         )
         {
-            try
-            {
-                var result = motoristaRepository.Consultar();
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(motoristaRepository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, MotoristaSort.Nome),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(nome)));
         }
 
-        [HttpGet("{id}")]
-        [Produces(typeof(MotoristaConsultaModel))]
-        public IActionResult GetById(int id)
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IMotoristaRepository repository,
+          [FromQuery] string coluna = "nome", [FromQuery] string direcao = "asc", [FromQuery] string nome = null)
         {
-            try
-            {
-                var result = motoristaRepository.ObterPorId(id);
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, MotoristaSort.Nome),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(nome));
 
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent();
-                }
-            }
-            catch (Exception e)
+            if (resultado.Tipo == ResultType.Valid)
             {
-                return StatusCode(500, "Erro: " + e.Message);
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("COD_MOTORISTA; NOME; AJUDANTE1; AJUDANTE2; TELEFONE1, TELEFONE2; PLACA");
+
+                foreach (var x in resultado.Dados)
+                {
+
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome) ? x.Nome : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Ajudante1) ? x.Ajudante1 : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Ajudante2) ? x.Ajudante2 : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Telefone1) ? x.Telefone1 : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Telefone2) ? x.Telefone2 : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Placa) ? x.Placa : string.Empty)}\";");
+                    csv.AppendLine("");
+                }
+
+                string nomeArquivo = $"Motorista{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
+            return Result(resultado);
         }
+     
     }
 }
 

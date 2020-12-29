@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Projeto.Services.Util;
 
 namespace Projeto.Services.Controllers
 {
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]

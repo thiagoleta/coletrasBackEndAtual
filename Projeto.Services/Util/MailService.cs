@@ -29,6 +29,7 @@ namespace Projeto.Services.Util
             //enviando o email..
             var client = new SmtpClient(mailSettings.Smtp, mailSettings.Port);
             client.EnableSsl = mailSettings.EnableSsl;
+            client.UseDefaultCredentials = mailSettings.UseDefaultCredentials;
             client.Credentials = new NetworkCredential
             (mailSettings.EmailAddress, mailSettings.Password);
             client.Send(mail);

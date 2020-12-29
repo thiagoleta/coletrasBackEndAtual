@@ -11,20 +11,22 @@ namespace Projeto.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Motorista> builder)
         {
-            //nome da tabela no banco de dados (opcional)
             builder.ToTable("Motorista");
-
-            //chave primária da tabela
-            //para o EF, todo campo int que for definido como chave primária
-            //já é criado como identity (auto-incremento)
             builder.HasKey(m => m.Cod_Motorista);
 
+            builder.Property(x => x.Cod_Motorista).HasColumnName("Cod_Motorista")
+           .IsRequired();
 
 
+            builder.Property(bi => bi.Telefone1).HasColumnName("Telefone1");
 
-            //builder.Property(m => m.Cod_Motorista)
-            // .HasColumnName("Cod_Motorista");
+            builder.Property(x => x.Telefone2).HasColumnName("Telefone2");
 
+            builder.Property(bi => bi.Ajudante1).HasColumnName("Ajudante1");
+
+            builder.Property(bi => bi.Ajudante2).HasColumnName("Ajudante2");
+
+            builder.Property(bi => bi.Placa).HasColumnName("Placa").IsRequired();
 
 
         }

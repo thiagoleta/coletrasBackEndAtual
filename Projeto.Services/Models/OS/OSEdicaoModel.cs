@@ -29,7 +29,7 @@ namespace Projeto.Services.Models.OS
         public string Placa { get; set; }
         public string Endereco_Cliente { get; set; }
         public string NomeCompleto_RazaoSocial_Cliente { get; set; }
-        public string Fantasia_Cliente { get; set; }
+        
         public int Coleta_Contratada { get; set; }
         public decimal Valor_Limite { get; set; }
         public decimal Valor_Unidade { get; set; }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,10 +16,13 @@ using Microsoft.Extensions.Options;
 using Projeto.Data.Context;
 using Projeto.Data.Contracts;
 using Projeto.Data.Repository;
+using Projeto.Data.Services;
 using Projeto.Data.Repository.RepositoriosDapper;
 using Projeto.Services.Configurations;
 using Projeto.Services.Util;
 using Swashbuckle.AspNetCore.Swagger;
+using Projeto.Data.Services.Implementations;
+using Projeto.Data.Seedwork.Notifying;
 
 namespace Projeto.Services
 {
@@ -63,19 +68,24 @@ namespace Projeto.Services
             #region Injeção de Dependência EntityFramework
 
             services.AddTransient<IMotoristaRepository, MotoristaRepository>();
+            services.AddScoped<IMotoristaService, MotoristaService>();
             services.AddTransient<IRotaRepository, RotaRepository>();
+            services.AddTransient<IRotaService, RotaService>();
             services.AddTransient<IClienteRepository, ClienteRepository>();
+            services.AddTransient<IClienteService, ClienteService>();
             services.AddTransient<IConfiguracaoRepository, ConfiguracaoRepository>();
             services.AddTransient<IContratoRepository, ContratoRepository>();
             services.AddTransient<IMaterialRepository, MaterialRepository>();
+            services.AddScoped<IMaterialService, MaterialService>();
             services.AddTransient<IMesReferenciaRepository, MesReferenciaRepository>();
             services.AddTransient<IOSRepository, OSRepository>();
             services.AddTransient<IPagamentoRepository, PagamentoRepository>();
             services.AddTransient<IDiasColetaRepository, DiasColetaRepository>();
             services.AddTransient<IPerfilRepository, PerfilRepository>();
             services.AddTransient<IRoteiroRepository, RoteiroRepository>();
-            services.AddTransient<ITurnoRepository, TurnoRepository>();
-            
+            services.AddTransient<ITurnoRepository, TurnoRepository>();         
+
+
 
             #endregion
 
@@ -165,6 +175,14 @@ namespace Projeto.Services
                 app.UseDeveloperExceptionPage();
             }
 
+            // Definindo a cultura padrão: pt-BR
+            var supportedCultures = new[] { new CultureInfo("pt-BR") };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(culture: "pt-BR", uiCulture: "pt-BR"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             #region Swagger
 
