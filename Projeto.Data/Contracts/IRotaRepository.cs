@@ -13,5 +13,7 @@ namespace Projeto.Data.Contracts
         CommandResult<PaginatedQueryResult<Rota>> ObterPaginado(int pagina, int quantidade, RotaSort sort, bool ascending, string nome);
 
         CommandResult<IReadOnlyCollection<Rota>> Obter(RotaSort sort, bool ascending, string nome);
+
+        CommandResult<IReadOnlyCollection<Rota>> ObterRotasAtivas();
     }
 }

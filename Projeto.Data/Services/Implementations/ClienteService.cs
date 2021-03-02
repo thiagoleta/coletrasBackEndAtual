@@ -14,13 +14,12 @@ namespace Projeto.Data.Services.Implementations
 {
     public class ClienteService : IClienteService
     {
-        private readonly DataColetrans dataContext;
-        private readonly IContratoRepository contratoRepo;
+        private readonly DataColetrans dataContext;        
 
         public ClienteService(DataColetrans dataContext, IContratoRepository contratoRepo)
         {
             this.dataContext = dataContext;
-            this.contratoRepo = contratoRepo;
+            
         }
 
         public CommandResult Atualizar(AtualizarClienteCommand command)
@@ -72,8 +71,7 @@ namespace Projeto.Data.Services.Implementations
 
                 return CommandResult.Invalid(ex.Message);
             }
-
-            throw new NotImplementedException();
+           
         }
 
         public CommandResult Criar(CriarClienteCommand command)
@@ -136,7 +134,7 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, cod_Cliente));
                 }
 
-                Contrato contrato = dataContext.Contrato.FirstOrDefault(x=> x.Cod_Cliente == cod_Cliente && x.Flag_Termino.Equals(true));
+                Contrato contrato = dataContext.Contrato.FirstOrDefault(x=> x.Cod_Contrato == cod_Cliente && x.FlagTermino.Equals(true));
 
                 if (contrato != null)
                 {

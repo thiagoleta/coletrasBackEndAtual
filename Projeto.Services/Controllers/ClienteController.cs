@@ -134,5 +134,13 @@ namespace Projeto.Services.Controllers
             }
             return Result(resultado);
         }
+
+        [HttpGet("clientesativos")]
+        public IActionResult ObterClientesAtivos([FromServices] IClienteRepository clienteRepository)
+        {
+            var resultado = clienteRepository.ObterClientesAtivos();
+            return Result(resultado);
+        }
+
     }
 }

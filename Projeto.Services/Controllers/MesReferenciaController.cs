@@ -1,25 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Data.Commands;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
+using Projeto.Data.Extensions;
 using Projeto.Data.Repository;
+using Projeto.Data.Repository.Sorts;
+using Projeto.Data.Seedwork;
+using Projeto.Data.Services;
+using Projeto.Data.ValueObjects;
 using Projeto.Services.Models.MesReferencia;
+using Projeto.Data.Repository.Sorts;
+using System.Globalization;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class MesReferenciaController : ControllerBase
+    public class MesReferenciaController : ApiControllerBase
     {
+        public const string FORMATO_DATA_PADRAO = "dd/MM/yyyy";
         //atributo
         private readonly IMesReferenciaRepository mesreferenciaRepository;
         private readonly IMapper mapper;
@@ -30,139 +41,103 @@ namespace Projeto.Services.Controllers
             this.mapper = mapper;
         }
 
+
         [HttpPost]
-        public IActionResult Post(MesReferenciaCadastroModel model)
+        public IActionResult Criar(
+         [FromServices] IMesReferenciaService service,
+         [FromBody] CriarMesReferenciaCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var mesreferencia = mapper.Map<MesReferencia>(model);
-                    mesreferenciaRepository.Inserir(mesreferencia);
-
-                    var result = new
-                    {
-                        message = "MesReferencia cadastrada com sucesso", 
-                        	mesreferencia
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
+
+
 
         [HttpPut]
-        public IActionResult Put(MesReferenciaEdicaoModel model)
+        public IActionResult Atualizar(
+         [FromServices] IMesReferenciaService service,
+         [FromBody] AtualizarMesReferenciaCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var mesreferencia = mapper.Map<MesReferencia>(model);
-                    mesreferenciaRepository.Alterar(mesreferencia);
-
-                    var result = new
-                    {
-                        message = "MesReferencia atualizado com sucesso",
-                        	mesreferencia
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Atualizar(command));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        [HttpDelete("{cod_MesReferencia}")]
+        public IActionResult Remover(
+     [FromServices] IMesReferenciaService service,
+      [FromRoute] int cod_MesReferencia)
         {
-
-            try
-            {
-                //buscar o MesReferencia referente ao id informado..
-                var mesreferencia = mesreferenciaRepository.ObterPorId(id);
-
-                //verificar se o MesReferencia foi encontrado..
-                if (mesreferencia != null)
-                {
-                    //excluindo o MesReferencia
-                    mesreferenciaRepository.Excluir(mesreferencia);
-
-                    var result = new
-                    {
-                        message = "MesReferencia excluído com sucesso.",
-                        	mesreferencia
-                    };
-
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest("Estoque não encontrado.");
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(service.Remover(cod_MesReferencia));
         }
+
+
 
         [HttpGet]
-        [Produces(typeof(List<MesReferenciaConsultaModel>))]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado(
+         [FromServices] IMesReferenciaRepository mesReferanciaRepository,
+         [FromQuery] int pagina, [FromQuery] int quantidade,
+         [FromQuery] string coluna = "mesAno",
+         [FromQuery] string direcao = "asc",
+         [FromQuery] string mesAno = null
+         )
         {
-            try
+
+            var resultado = mesReferanciaRepository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, MesReferenciaSort.MesAno),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(mesAno));
+
+            if (resultado.Tipo == ResultType.Valid)
             {
-                var result = mesreferenciaRepository.Consultar();
-                return Ok(result);
+
+
+                foreach (var mesRef in resultado.Dados.Data)
+                {
+                  
+                    if (mesRef.DataInicio != null)
+                    {
+                        string data = mesRef.DataInicio.ToShortDateString();
+
+                        //ToShortDateString()
+
+                        //mesRef.DataInicio = data;
+                    }                     
+
+                }
+
+                
+
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(resultado);
         }
+  
 
-        [HttpGet("{id}")]
-        [Produces(typeof(MesReferenciaConsultaModel))]
-        public IActionResult GetById(int id)
+
+
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IMesReferenciaRepository repository,
+         [FromQuery] string coluna = "nome", [FromQuery] string direcao = "asc", [FromQuery] string nome = null)
         {
-            try
-            {
-                var result = mesreferenciaRepository.ObterPorId(id);
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, MesReferenciaSort.MesAno),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"), DataString.FromNullableString(nome));
 
-                if (result != null) //se o MesReferencia foi encontrado..
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent(); //HTTP 204 (SUCESSO -> Vazio)
-                }
-            }
-
-            catch (Exception e)
+            if (resultado.Tipo == ResultType.Valid)
             {
-                return StatusCode(500, "Erro: " + e.Message);
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("COD_MES_REFERÊNCIA; MES/ANO; DATA INICIO REFERÊNCIA; DATA FIM REFERÊNCIA;");
+
+                foreach (var x in resultado.Dados)
+                {
+
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.MesAno) ? x.MesAno : string.Empty)}\";");
+                    csv.Append($"\"{(x.DataInicio != null ? x.DataInicio.ToShortDateString() : string.Empty)}\";");
+                    csv.Append($"\"{(x.DataTermino != null ? x.DataTermino.Value.ToShortDateString() : string.Empty)}\";");
+                    csv.AppendLine("");
+                }
+
+                string nomeArquivo = $"MesReferencia{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
+            return Result(resultado);
         }
     }
 }

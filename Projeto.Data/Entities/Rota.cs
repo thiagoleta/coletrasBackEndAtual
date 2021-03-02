@@ -14,6 +14,12 @@ namespace Projeto.Data.Entities
         {
         }
 
+        public Rota(int cod_Rota, string nome)
+        {
+            this.Cod_Rota = cod_Rota;
+            this.Nome = nome;
+        }
+
         public static Rota Criar(
             DataString nome,
             DataString? composicao_rota,
@@ -33,8 +39,8 @@ namespace Projeto.Data.Entities
         }
 
         public void Atualizar(DataString nome,
-            DataString composicao_rota,
-            DataString observacao,
+            DataString? composicao_rota,
+            DataString? observacao,
             bool? flag_ativo)
         {
             {

@@ -13,6 +13,13 @@ namespace Projeto.Data.Entities
 
 		}
 
+        public Motorista(int cod_motorista, string nome)
+        {
+            this.Cod_Motorista = cod_motorista;
+            this.Nome = nome;
+        }
+
+
         public static Motorista Criar(DataString nome,
             DataString? ajudante1,
             DataString? ajudante2,

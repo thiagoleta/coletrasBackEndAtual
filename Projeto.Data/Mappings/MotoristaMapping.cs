@@ -14,8 +14,7 @@ namespace Projeto.Data.Mappings
             builder.ToTable("Motorista");
             builder.HasKey(m => m.Cod_Motorista);
 
-            builder.Property(x => x.Cod_Motorista).HasColumnName("Cod_Motorista")
-           .IsRequired();
+            builder.Property(x => x.Cod_Motorista).HasColumnName("Cod_Motorista").IsRequired();
 
 
             builder.Property(bi => bi.Telefone1).HasColumnName("Telefone1");

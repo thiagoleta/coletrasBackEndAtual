@@ -27,6 +27,13 @@ namespace Projeto.Data.Repository
             return CommandResult<IReadOnlyCollection<Motorista>>.Valid(resultado);
         }
 
+        public CommandResult<IReadOnlyCollection<Motorista>> ObterMotoristas()
+        {
+            IQueryable<Motorista> query = dataContext.Motorista.AsNoTracking();
+            var result = query.OrderBy(x => x.Nome).Select(x => new Motorista(x.Cod_Motorista, x.Nome)).ToArray();            
+            return CommandResult<IReadOnlyCollection<Motorista>>.Valid(result);
+        }
+
         public CommandResult<PaginatedQueryResult<Motorista>> ObterPaginado(int pagina, int quantidade, MotoristaSort sort, bool ascending, string nome)
         {
 

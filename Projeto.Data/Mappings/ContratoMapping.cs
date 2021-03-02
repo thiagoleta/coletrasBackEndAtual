@@ -22,8 +22,21 @@ namespace Projeto.Data.Mappings
             #region Mapeamento dos Relacionamentos
 
             //Relacionamento um para 1
-            builder.Property(c => c.Cod_Cliente);
-            builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.Cod_Cliente);
+            builder.Property(c => c.CodCliente).HasColumnName("Cod_Cliente").IsRequired();
+            builder.Property(c => c.ColetaContratada).HasColumnName("Coleta_Contratada").IsRequired();
+
+            builder.Property(c => c.ValorLimite).HasColumnName("Valor_Limite");
+            builder.Property(c => c.ValorUnidade).HasColumnName("Valor_Unidade");            
+
+            builder.Property(x => x.FlagTermino).HasColumnName("Flag_Termino");
+            builder.Property(x => x.MotivoCancelamento).HasColumnName("Motivo_Cancelamento");
+            builder.Property(x => x.DataCancelamento).HasColumnName("Data_Cancelamento");
+
+
+            builder.Property(x => x.DataInicio).HasColumnName("Data_Inicio");
+            builder.Property(x => x.DataTermino).HasColumnName("Data_Termino");
+
+            builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.CodCliente);
 
 
             #endregion

@@ -32,7 +32,12 @@ namespace Projeto.Data.Repository
             return CommandResult<IReadOnlyCollection<Cliente>>.Valid(resultado);
         }
 
-  
+        public CommandResult<IReadOnlyCollection<Cliente>> ObterClientesAtivos()
+        {   
+            IQueryable<Cliente> query = dataContext.Cliente.AsNoTracking();   
+            var result = query.OrderBy(x => x.NomeCompleto_RazaoSocial).Select(x => new Cliente(x.Cod_Cliente, x.NomeCompleto_RazaoSocial)).ToArray();            
+            return CommandResult<IReadOnlyCollection<Cliente>>.Valid(result);
+        }
 
         public CommandResult<PaginatedQueryResult<Cliente>> ObterPaginado(ClienteSort sort, bool ascending, int pagina, int quantidade, DataString? nomeCompleto_RazaoSocial, DataString? cpfCnpj)
         {

@@ -47,8 +47,8 @@ namespace Projeto.Data.Services.Implementations
                 }
 
                 rota.Atualizar(DataString.FromString(command.Nome),
-                    DataString.FromString(command.Composicao_Rota),
-                    DataString.FromString(command.Observacao),
+                    DataString.FromNullableString(command.Composicao_Rota),
+                    DataString.FromNullableString(command.Observacao),
                     command.Flag_Ativo);
 
 

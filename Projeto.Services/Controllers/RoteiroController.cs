@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Data.Commands;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
+using Projeto.Data.Extensions;
+using Projeto.Data.Repository.Sorts;
+using Projeto.Data.Seedwork;
+using Projeto.Data.Services;
 using Projeto.Services.Models.Roteiro;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class RoteiroController : ControllerBase
+    public class RoteiroController : ApiControllerBase
     {
         
         private readonly IRoteiroRepository rotreiroRepository;
@@ -30,139 +37,77 @@ namespace Projeto.Services.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(RoteiroCadastroModel model)
+        public IActionResult Criar([FromServices] IRoteiroService service, [FromBody] CriarRoteiroCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var roteiro = mapper.Map<Roteiro>(model);
-                    rotreiroRepository.Inserir(roteiro);
-
-                    var result = new
-                    {
-                        message = "Roteiro cadastrado com sucesso",
-                        roteiro
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
 
         [HttpPut]
-        public IActionResult Put(RoteiroEdicaoModel model)
+        public IActionResult Atualizar([FromServices] IRoteiroService service, [FromBody] AtualizarRoteiroCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var roteiro = mapper.Map<Roteiro>(model);
-                    rotreiroRepository.Alterar(roteiro);
-
-                    var result = new
-                    {
-                        message = "Roteiro atualizado com sucesso",
-                        roteiro
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Atualizar(command));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{cod_Roteiro}")]
+        public IActionResult Remover(
+                              [FromServices] IRoteiroService service,
+                              [FromRoute] int cod_Roteiro)
         {
-
-            try
-            {
-                //buscar o OS referente ao id informado..
-                var roteiro = rotreiroRepository.ObterPorId(id);
-
-                //verificar se o OS foi encontrado..
-                if (roteiro != null)
-                {
-                    //excluindo o OS
-                    rotreiroRepository.Excluir(roteiro);
-
-                    var result = new
-                    {
-                        message = "Roteiro excluído com sucesso.",
-                        roteiro
-                    };
-
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest("Roteiro não encontrado.");
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(service.Remover(cod_Roteiro));
         }
 
-
-        [HttpGet("{id}")]
-        [Produces(typeof(RoteiroConsultaModel))]
-        public IActionResult GetById(int id)
-        {
-            try
-            {
-                var result = rotreiroRepository.ObterPorId(id);
-
-                if (result != null) //se o roteiro foi encontrado..
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent(); //HTTP 204 (SUCESSO -> Vazio)
-                }
-            }
-
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
-        }
 
         [HttpGet]
-        [Produces(typeof(List<RoteiroConsultaModel>))]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado([FromServices] IRoteiroRepository repository,
+
+             [FromQuery] int pagina = 1,
+             [FromQuery] int quantidade = 8,
+             [FromQuery] string coluna = "cliente", [FromQuery] string direcao = "asc")
         {
-            try
+            return Result(repository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, RoteiroSort.Cliente),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc")));
+        }
+
+
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IRoteiroRepository repository,
+                                     [FromQuery] string coluna = "cliente",
+                                     [FromQuery] string direcao = "asc")
+        {
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, RoteiroSort.Cliente),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"));
+
+            if (resultado.Tipo == ResultType.Valid)
             {
-                var result = rotreiroRepository.Consultar();
-                return Ok(result);
+        
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("NOME CLIENTE;TURNO;MOTORISTA;ENDEREÇO;MATERIAL;MATERIAL_COLETADO;SEGUNDA;TERÇA;QUARTA;QUINTA;SEXTA;SÁBADO;DOMINGO;OBSERVAÇÃO");
+
+                foreach (var x in resultado.Dados)
+                {
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.NomeCompleto_RazaoSocial) ? x.Cliente.NomeCompleto_RazaoSocial : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Turno.Nome_Turno) ? x.Turno.Nome_Turno : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Motorista.Nome) ? x.Motorista.Nome : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.Endereco) ? x.Cliente.Endereco : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Material.Descricao) ? x.Material.Descricao : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Material.Material_Coletado) ? x.Material.Material_Coletado : string.Empty)}\";");
+                    csv.Append($"\"{(x.Segunda != null ? (Convert.ToBoolean(x.Segunda) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Terca != null ? (Convert.ToBoolean(x.Terca) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Quarta != null ? (Convert.ToBoolean(x.Quarta) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Quinta != null ? (Convert.ToBoolean(x.Quinta) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Sexta != null ? (Convert.ToBoolean(x.Sexta) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Sabado != null ? (Convert.ToBoolean(x.Sabado) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(x.Domingo != null ? (Convert.ToBoolean(x.Domingo) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Observacao) ? x.Observacao : string.Empty)}\";");
+                    csv.AppendLine("");
+                }
+
+                string nomeArquivo = $"roteiro{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(resultado);
         }
     }
 }

@@ -29,6 +29,13 @@ namespace Projeto.Data.Repository
             return CommandResult<IReadOnlyCollection<Material>>.Valid(resultado);
         }
 
+        public CommandResult<IReadOnlyCollection<Material>> ObterMateriais()
+        {
+            IQueryable<Material> query = dataContext.Material.AsNoTracking();
+            var result = query.OrderBy(x => x.Descricao).Select(x => new Material(x.Cod_Material, x.Descricao)).ToArray();
+            return CommandResult<IReadOnlyCollection<Material>>.Valid(result);
+        }
+
         public CommandResult<PaginatedQueryResult<Material>> ObterPaginado(int pagina, int quantidade, MaterialSort sort, bool ascending, string descricao)
         {          
                        

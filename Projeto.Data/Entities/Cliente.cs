@@ -14,7 +14,13 @@ namespace Projeto.Data.Entities
         {
 
         }
-      
+
+        public Cliente(int cod_cliente, string nomeCliente)
+        {
+            this.Cod_Cliente = cod_cliente;
+            this.NomeCompleto_RazaoSocial = nomeCliente;
+        }
+
 
         public void Atualizar(
             DataString cPF_CNPJ,

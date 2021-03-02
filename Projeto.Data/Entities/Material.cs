@@ -17,7 +17,13 @@ namespace Projeto.Data.Entities
 		private Material()
 		{
 		}
+  
 
+        public Material(int cod_material, string descricao)
+        {
+            this.Cod_Material = cod_material;
+            this.Descricao = descricao;
+        }
 
         public static Material Criar(DataString descricao, DataString? volume, DataString? observacao, DataString? material_coletado)
         {
@@ -34,7 +40,7 @@ namespace Projeto.Data.Entities
             return material;
         }
 
-        public void Atualizar(DataString descricao, string volume, DataString observacao, DataString material_coletado)
+        public void Atualizar(DataString descricao, string volume, DataString? observacao, DataString? material_coletado)
         {
             Descricao = descricao;
             Volume = volume;

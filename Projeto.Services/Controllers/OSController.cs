@@ -58,7 +58,7 @@ namespace Projeto.Services.Controllers
                         foreach (var cliente in model.Clientes)
                         {
                             var contratoAtivo = contratoRepository.Consultar()
-                            .FirstOrDefault(co => co.Cod_Cliente.Equals(cliente.Cod_Cliente) && co.Flag_Termino.Equals(false));
+                            .FirstOrDefault(co => co.CodCliente.Equals(cliente.Cod_Cliente) && co.FlagTermino.Equals(false));
 
                             if (contratoAtivo != null)
                             {
@@ -68,9 +68,9 @@ namespace Projeto.Services.Controllers
                                 os.NomeCompleto_RazaoSocial_Cliente = cliente.NomeCompleto_RazaoSocial;
                                 os.Email_Cliente = cliente.Email;
                                 os.Cod_Contrato = contratoAtivo.Cod_Contrato;
-                                os.Valor_Limite = contratoAtivo.Valor_Limite;
-                                os.Coleta_Contratada = contratoAtivo.Coleta_Contratada;
-                                os.Valor_Unidade = contratoAtivo.Valor_Unidade;
+                                os.Valor_Limite = contratoAtivo.ValorLimite;
+                                os.Coleta_Contratada = contratoAtivo.ColetaContratada;
+                                os.Valor_Unidade = contratoAtivo.ValorUnidade;
                                 os.Cod_Cliente = cliente.Cod_Cliente;
 
                                 System.Globalization.CultureInfo brasil = new System.Globalization.CultureInfo("pt-BR");
@@ -79,7 +79,7 @@ namespace Projeto.Services.Controllers
 
                                 os.Data_Geracao = dt;
 
-                                var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.Data_Encerramento == null && m.Flag_Encerramento.Equals(false));
+                                var MesRef = mesRepository.Consultar().FirstOrDefault(m => m.DataTermino == null && m.Ativo.Equals(false));
 
                                 if (MesRef is null )
                                 {

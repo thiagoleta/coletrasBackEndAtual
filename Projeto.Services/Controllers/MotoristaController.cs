@@ -114,7 +114,14 @@ namespace Projeto.Services.Controllers
             }
             return Result(resultado);
         }
-     
+
+        [HttpGet("motoristas")]
+        public IActionResult ObterMotoristas([FromServices] IMotoristaRepository motoristaRepository)
+        {
+            var resultado = motoristaRepository.ObterMotoristas();
+            return Result(resultado);
+        }
+
     }
 }
 

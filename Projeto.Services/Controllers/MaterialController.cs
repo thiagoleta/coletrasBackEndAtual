@@ -106,5 +106,12 @@ namespace Projeto.Services.Controllers
             }
             return Result(resultado);
         }
+
+        [HttpGet("materiais")]
+        public IActionResult ObterMateriais([FromServices] IMaterialRepository materialRepository)
+        {
+            var resultado = materialRepository.ObterMateriais();
+            return Result(resultado);
+        }
     }
 }

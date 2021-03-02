@@ -16,5 +16,7 @@ namespace Projeto.Data.Contracts
 
         CommandResult<PaginatedQueryResult<Cliente>> ObterPaginado(ClienteSort sort, bool ascending, int pagina, int quantidade, DataString? nomeCompleto_RazaoSocial, DataString? cpfCnpj);
 
+        CommandResult<IReadOnlyCollection<Cliente>> ObterClientesAtivos();
+
     }
 }

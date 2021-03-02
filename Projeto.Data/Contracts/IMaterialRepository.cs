@@ -14,5 +14,7 @@ namespace Projeto.Data.Contracts
         CommandResult<PaginatedQueryResult<Material>> ObterPaginado(int pagina, int quantidade,  MaterialSort sort, bool ascending, string descricao);
 
         CommandResult<IReadOnlyCollection<Material>> Obter(MaterialSort sort, bool ascending, string descricao);
+
+        CommandResult<IReadOnlyCollection<Material>> ObterMateriais();
     }
 }

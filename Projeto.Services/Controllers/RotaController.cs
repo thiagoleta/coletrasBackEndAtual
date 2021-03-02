@@ -110,5 +110,13 @@ namespace Projeto.Services.Controllers
             return Result(service.Criar(command));
         }
 
+        [HttpGet("rotasativas")]
+        public IActionResult ObterRotasAtivas([FromServices] IRotaRepository rotaRepository)
+        {
+            var resultado = rotaRepository.ObterRotasAtivas();
+            return Result(resultado);
+        }
+
+
     }
 }

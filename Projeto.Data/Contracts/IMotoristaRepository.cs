@@ -13,5 +13,7 @@ namespace Projeto.Data.Contracts
         CommandResult<PaginatedQueryResult<Motorista>> ObterPaginado(int pagina, int quantidade, MotoristaSort sort, bool ascending, string nome);
 
         CommandResult<IReadOnlyCollection<Motorista>> Obter(MotoristaSort sort, bool ascending, string nome);
+
+        CommandResult<IReadOnlyCollection<Motorista>> ObterMotoristas();
     }
 }

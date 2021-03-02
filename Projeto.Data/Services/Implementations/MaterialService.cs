@@ -50,8 +50,8 @@ namespace Projeto.Data.Services.Implementations
 
                 material.Atualizar(DataString.FromString(command.Descricao),
                     command.Volume,
-                    DataString.FromString(command.Material_Coletado),
-                    DataString.FromString(command.Material_Coletado));
+                    DataString.FromNullableString(command.Material_Coletado),
+                    DataString.FromNullableString(command.Material_Coletado));
 
                 //if (material.HasNotifications)
                 //{                    

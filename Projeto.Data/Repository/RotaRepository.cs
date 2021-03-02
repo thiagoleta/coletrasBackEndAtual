@@ -104,6 +104,13 @@ namespace Projeto.Data.Repository
             return CommandResult<PaginatedQueryResult<Rota>>.Valid(resultado);
         }
 
+        public CommandResult<IReadOnlyCollection<Rota>> ObterRotasAtivas()
+        {
+            IQueryable<Rota> query = dataContext.Rota.AsNoTracking().Where(x => x.Flag_Ativo.Equals("S"));
+            var result = query.OrderBy(x => x.Nome).Select(x => new Rota(x.Cod_Rota, x.Nome)).ToArray();
+            return CommandResult<IReadOnlyCollection<Rota>>.Valid(result);
+        }
+
         ////sobrescrita de método (OVERRIDE)
         //public override List<Rota> Consultar()
         //{
