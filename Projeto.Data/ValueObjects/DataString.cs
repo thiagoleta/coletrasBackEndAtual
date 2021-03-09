@@ -66,5 +66,25 @@ namespace Projeto.Data.ValueObjects
 
             return new DataString(value);
         }
+
+        public static DateTime? FromNullableDate(DateTime? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            return value;
+        }
+
+        public static DateTime FromDate(DateTime value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), "O 'value' não pode ser nulo");
+            }
+
+            return value;
+        }
     }
 }
