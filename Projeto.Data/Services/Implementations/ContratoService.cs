@@ -109,7 +109,7 @@ namespace Projeto.Data.Services.Implementations
 
         public CommandResult Remover(int cod_Contrato)
         {
-            string entityName = "Cliente";
+            string entityName = "Contrato";
             string commandName = $"Removendo {entityName}";
 
             try

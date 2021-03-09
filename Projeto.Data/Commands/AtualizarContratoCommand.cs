@@ -8,12 +8,11 @@ namespace Projeto.Data.Commands
     public class AtualizarContratoCommand : Validatable, IValidatable
 	{
 		public int Cod_Contrato { get; set; }
-
 		public int ColetaContratada { get; set; }
 		public Decimal? ValorLimite { get; set; }
 		public Decimal ValorUnidade { get; set; }
 
-		public string? MotivoCancelamento { get; set; }
+		public string MotivoCancelamento { get; set; }
 		public DateTime? DataCancelamento { get; set; }
 		public bool? FlagTermino { get; set; }
 		public DateTime DataInicio { get; set; }

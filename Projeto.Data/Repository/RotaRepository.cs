@@ -106,7 +106,7 @@ namespace Projeto.Data.Repository
 
         public CommandResult<IReadOnlyCollection<Rota>> ObterRotasAtivas()
         {
-            IQueryable<Rota> query = dataContext.Rota.AsNoTracking().Where(x => x.Flag_Ativo.Equals("S"));
+            IQueryable<Rota> query = dataContext.Rota.AsNoTracking().Where(x => x.Flag_Ativo.Equals(true));
             var result = query.OrderBy(x => x.Nome).Select(x => new Rota(x.Cod_Rota, x.Nome)).ToArray();
             return CommandResult<IReadOnlyCollection<Rota>>.Valid(result);
         }

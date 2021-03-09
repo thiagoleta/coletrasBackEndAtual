@@ -20,7 +20,8 @@ using Projeto.Services.Models.Contrato;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+   // [Authorize("Bearer")]
+   [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
@@ -55,10 +56,10 @@ namespace Projeto.Services.Controllers
 
         [HttpGet]
         public IActionResult ObterPaginado([FromServices] IContratoRepository repository,
-            
-            [FromQuery] int pagina = 1,
-            [FromQuery] int quantidade = 8,
-            [FromQuery] string coluna = "ClienteNome", [FromQuery] string direcao = "asc")
+
+         [FromQuery] int pagina = 1,
+             [FromQuery] int quantidade = 8,
+             [FromQuery] string coluna = "cliente", [FromQuery] string direcao = "asc")
         {
             return Result(repository.ObterPaginado(pagina,quantidade, EnumHelpers.ParseOrDefault(coluna, ContratoSort.ClienteNome),
                 string.IsNullOrEmpty(direcao) || direcao.Equals("asc")));
@@ -77,7 +78,7 @@ namespace Projeto.Services.Controllers
             if (resultado.Tipo == ResultType.Valid)
             {
                 StringBuilder csv = new StringBuilder();
-                csv.AppendLine("COD_CLIENTE; NOME CLIENTE; COLETA CONTRATADA; VALOR LIMITE; VALOR UNIDADE;MOTIVO CANCELAMENTO;DATA CANCELAMENTO;FLAG TERMINO; DATA INICIO; DATA TERMINO  CONTRATO  ");
+                csv.AppendLine("COD_CLIENTE; NOME CLIENTE;COLETA CONTRATADA; VALOR LIMITE; VALOR UNIDADE;MOTIVO CANCELAMENTO;DATA CANCELAMENTO;FLAG TERMINO; DATA INICIO; DATA TERMINO  CONTRATO  ");
 
                 foreach (var x in resultado.Dados)
                 {
