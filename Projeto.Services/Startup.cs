@@ -73,14 +73,16 @@ namespace Projeto.Services
             services.AddTransient<IRotaService, RotaService>();
             services.AddTransient<IClienteRepository, ClienteRepository>();
             services.AddTransient<IClienteService, ClienteService>();
-            services.AddTransient<IConfiguracaoRepository, ConfiguracaoRepository>();
+            services.AddTransient<IConfiguracaoRepository, ConfiguracaoRepository>();            
             services.AddTransient<IContratoRepository, ContratoRepository>();
+            services.AddTransient<IContratoService, ContratoService>();
             services.AddTransient<IMaterialRepository, MaterialRepository>();
             services.AddScoped<IMaterialService, MaterialService>();
             services.AddTransient<IMesReferenciaRepository, MesReferenciaRepository>();
             services.AddTransient<IMesReferenciaService, MesReferenciaService>();
             services.AddTransient<IOSRepository, OSRepository>();
             services.AddTransient<IPagamentoRepository, PagamentoRepository>();
+            services.AddTransient<IPagamentoService, PagamentoService>();
             services.AddTransient<IDiasColetaRepository, DiasColetaRepository>();
             services.AddTransient<IPerfilRepository, PerfilRepository>();
             services.AddTransient<IRoteiroService, RoteiroService>();

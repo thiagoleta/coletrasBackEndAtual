@@ -1,24 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Data.Commands;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
+using Projeto.Data.Extensions;
 using Projeto.Data.Repository;
+using Projeto.Data.Repository.Sorts;
+using Projeto.Data.Seedwork;
+using Projeto.Data.Services;
 using Projeto.Services.Models.Pagamento;
 
 namespace Projeto.Services.Controllers
 {
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class PagamentoController : ControllerBase
+    public class PagamentoController : ApiControllerBase
     {
         //atributo
         private readonly IPagamentoRepository pagamentoRepository;
@@ -31,138 +38,69 @@ namespace Projeto.Services.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(PagamentoCadastroModel model)
+        public IActionResult Criar([FromServices] IPagamentoService service, [FromBody] CriarPagamentoCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var pagamento = mapper.Map<Pagamento>(model);
-                    pagamentoRepository.Inserir(pagamento);
-
-                    var result = new
-                    {
-                        message = "Pagamento cadastrada com sucesso", 
-                        	pagamento
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
 
         [HttpPut]
-        public IActionResult Put(PagamentoEdicaoModel model)
+        public IActionResult Atualizar([FromServices] IPagamentoService service, [FromBody] AtualizarPagamentoCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var pagamento = mapper.Map<Pagamento>(model);
-                    pagamentoRepository.Alterar(pagamento);
-
-                    var result = new
-                    {
-                        message = "Pagamento atualizado com sucesso",
-                        	pagamento
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Atualizar(command));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        [HttpDelete("{cod_Pagamento}")]
+        public IActionResult Remover(
+                          [FromServices] IPagamentoService service,
+                          [FromRoute] int cod_Pagamento)
         {
-
-            try
-            {
-                //buscar o Pagamento referente ao id informado..
-                var pagamento = pagamentoRepository.ObterPorId(id);
-
-                //verificar se o Pagamento foi encontrado..
-                if (pagamento != null)
-                {
-                    //excluindo o Pagamento
-                    pagamentoRepository.Excluir(pagamento);
-
-                    var result = new
-                    {
-                        message = "Pagamento excluído com sucesso.",
-                        	pagamento
-                    };
-
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest("Estoque não encontrado.");
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(service.Remover(cod_Pagamento));
         }
+
 
         [HttpGet]
-        [Produces(typeof(List<PagamentoConsultaModel>))]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado([FromServices] IPagamentoRepository repository,
+
+            [FromQuery] int pagina = 1,
+            [FromQuery] int quantidade = 8,
+            [FromQuery] string coluna = "NomeCliente", [FromQuery] string direcao = "asc")
         {
-            try
-            {
-                var result = pagamentoRepository.Consultar();
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(repository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, PagamentoSort.NomeCliente),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc")));
         }
 
-        [HttpGet("{id}")]
-        [Produces(typeof(PagamentoConsultaModel))]
-        public IActionResult GetById(int id)
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IPagamentoRepository repository,
+                                    [FromQuery] string coluna = "NomeCliente",
+                                    [FromQuery] string direcao = "asc")
         {
-            try
-            {
-                var result = pagamentoRepository.ObterPorId(id);
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, PagamentoSort.NomeCliente),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc"));
 
-                if (result != null) //se o Pagamento foi encontrado..
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent(); //HTTP 204 (SUCESSO -> Vazio)
-                }
-            }
-
-            catch (Exception e)
+            if (resultado.Tipo == ResultType.Valid)
             {
-                return StatusCode(500, "Erro: " + e.Message);
+
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("COD_PAGAMENTO;NOME CLIENTE;MES REFERENCIA;VALOR;DATA PAGAMENTO");
+
+                foreach (var x in resultado.Dados)
+                {
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.NomeCompleto_RazaoSocial) ? x.Cliente.NomeCompleto_RazaoSocial : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.CPF_CNPJ) ? x.Cliente.CPF_CNPJ : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.Fantasia) ? x.Cliente.Fantasia : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.MesReferencia.MesAno) ? x.MesReferencia.MesAno : string.Empty)}\";");
+                    csv.Append($"=\"{x.Valor}\";");                    
+                    csv.Append($"=\"{x.Data}\";");
+                    csv.AppendLine("");
+                }
+
+                string nomeArquivo = $"Pagamento{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
+            return Result(resultado);
         }
     }
 }

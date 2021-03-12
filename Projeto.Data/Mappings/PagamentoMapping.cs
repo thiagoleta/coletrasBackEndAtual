@@ -19,10 +19,16 @@ namespace Projeto.Data.Mappings
             //jA? A© criado como identity (auto-incremento)
             builder.HasKey(p => p.Cod_Pagamento);
 
+            builder.Property(x => x.Valor).HasColumnName("Valor");
+            builder.Property(x => x.Data).HasColumnName("Data");
+            builder.Property(x => x.Cod_MesReferencia).HasColumnName("Cod_MesReferencia").IsRequired();
+            builder.Property(x => x.Cod_Cliente).HasColumnName("Cod_Cliente").IsRequired();
+
             #region Mapeamento dos Relacionamentos
 
+
             builder.HasOne(m => m.MesReferencia).WithMany().HasForeignKey(m => m.Cod_MesReferencia);
-            builder.HasOne(c => c.Contrato).WithMany().HasForeignKey(c => c.Cod_Contrato);
+            builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.Cod_Cliente);
 
             #endregion
 

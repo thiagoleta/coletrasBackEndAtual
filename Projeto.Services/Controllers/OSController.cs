@@ -58,7 +58,7 @@ namespace Projeto.Services.Controllers
                         foreach (var cliente in model.Clientes)
                         {
                             var contratoAtivo = contratoRepository.Consultar()
-                            .FirstOrDefault(co => co.CodCliente.Equals(cliente.Cod_Cliente) && co.FlagTermino.Equals(false));
+                            .FirstOrDefault(co => co.Cod_Cliente.Equals(cliente.Cod_Cliente) && co.FlagTermino.Equals(false));
 
                             if (contratoAtivo != null)
                             {

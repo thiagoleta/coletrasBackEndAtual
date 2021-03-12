@@ -25,6 +25,8 @@ namespace Projeto.Data.Entities
 										DateTime? dataTermino,
 										Cliente cliente)
 
+
+
 		{
 			var contrato = new Contrato()
 			{
@@ -36,13 +38,11 @@ namespace Projeto.Data.Entities
 				FlagTermino = flagTermino,
 				DataInicio = dataInicio,
 				DataTermino = dataTermino,
-				CodCliente = cliente.Cod_Cliente,
-
+				Cod_Cliente = cliente.Cod_Cliente,
+				
 			};
-			
 			return contrato;
 		}
-
 
 		public void Atualizar( int coletaContratada,
 								decimal? valorLimite,
@@ -63,7 +63,7 @@ namespace Projeto.Data.Entities
 			FlagTermino = flagTermino;
 			DataInicio = dataInicio;
 			DataTermino = dataTermino;
-			CodCliente = cliente.Cod_Cliente;
+			Cod_Cliente = cliente.Cod_Cliente;
 		}
 	
 			
@@ -77,10 +77,11 @@ namespace Projeto.Data.Entities
         public DateTime? DataCancelamento { get; set; }
 		public bool? FlagTermino { get; set; }
 		public DateTime DataInicio { get; set; }
-		public DateTime? DataTermino { get; set; }				
+		public DateTime? DataTermino { get; set; }
+		public int Cod_Cliente { get; set; }
+
+		public Cliente Cliente { get; set; }
 		
-		public int CodCliente { get; set; }
-		public Cliente Cliente { get; set; }	
 		
 
 	}

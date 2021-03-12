@@ -16,7 +16,7 @@ namespace Projeto.Data.Mappings
 			builder.ToTable("Cliente");
 
 			builder.HasKey(x => x.Cod_Cliente);
-			builder.Property(x => x.Cod_Cliente).HasColumnName("Cod_Cliente").HasDefaultValue(null); ;
+			builder.Property(x => x.Cod_Cliente).HasColumnName("Cod_Cliente").HasDefaultValue(null);
 			
 
 

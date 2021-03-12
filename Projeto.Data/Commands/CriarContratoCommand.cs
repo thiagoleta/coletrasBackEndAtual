@@ -18,8 +18,7 @@ namespace Projeto.Data.Commands
 		public bool? FlagTermino { get; set; }
 		public DateTime DataInicio { get; set; }
 		public DateTime? DataTermino { get; set; }
-
-		public int CodCliente { get; set; }
+		public int Cod_Cliente { get; set; }
 
 
 		public override void Validate()

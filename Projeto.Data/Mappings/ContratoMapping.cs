@@ -12,20 +12,21 @@ namespace Projeto.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Contrato> builder)
         {
-            
-            builder.ToTable("Contrato");            
-            builder.HasKey(c => c.Cod_Contrato);
+
+            builder.ToTable("Contrato");
+            builder.HasKey(x => x.Cod_Contrato);
+            builder.Property(x => x.Cod_Contrato).HasColumnName("Cod_Contrato").HasDefaultValue(null);
 
             #region Mapeamento dos Relacionamentos
 
-            
-            builder.Property(c => c.CodCliente).HasColumnName("Cod_Cliente").IsRequired();
+
+            builder.Property(c => c.Cod_Cliente).HasColumnName("Cod_Cliente").HasDefaultValue(null);
             builder.Property(c => c.ColetaContratada).HasColumnName("Coleta_Contratada").IsRequired();
 
             builder.Property(c => c.ValorLimite).HasColumnName("Valor_Limite");
             builder.Property(c => c.ValorUnidade).HasColumnName("Valor_Unidade");           
                         
-            builder.Property(ro => ro.FlagTermino).HasColumnName("Flag_Termino").HasConversion(ValueConverters.BoolToString).HasDefaultValue(false);
+            builder.Property(c => c.FlagTermino).HasColumnName("Flag_Termino").HasConversion(ValueConverters.BoolToString).HasDefaultValue(false);
             builder.Property(x => x.MotivoCancelamento).HasColumnName("Motivo_Cancelamento");
             builder.Property(x => x.DataCancelamento).HasColumnName("Data_Cancelamento");
 
@@ -33,7 +34,8 @@ namespace Projeto.Data.Mappings
             builder.Property(x => x.DataInicio).HasColumnName("Data_Inicio");
             builder.Property(x => x.DataTermino).HasColumnName("Data_Termino");
 
-            builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.CodCliente);
+            builder.Property(c => c.Cod_Cliente);
+            builder.HasOne(c => c.Cliente).WithMany().HasForeignKey(c => c.Cod_Cliente);
 
 
             #endregion

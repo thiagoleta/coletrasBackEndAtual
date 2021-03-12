@@ -20,22 +20,20 @@ using Projeto.Services.Models.Contrato;
 
 namespace Projeto.Services.Controllers
 {
-   // [Authorize("Bearer")]
-   [AllowAnonymous]
+    //[Authorize("Bearer")]
+    [AllowAnonymous]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
+
     public class ContratoController : ApiControllerBase
     {
-       
+
         [HttpPost]
-        public IActionResult Criar(
-           [FromServices] IContratoService service,
-           [FromBody] CriarContratoCommand command)
+        public IActionResult Criar([FromServices] IContratoService service, [FromBody] CriarContratoCommand command)
         {
             return Result(service.Criar(command));
         }
-
 
         [HttpPut]
         public IActionResult Atualizar(

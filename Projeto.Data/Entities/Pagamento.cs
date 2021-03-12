@@ -8,31 +8,57 @@ namespace Projeto.Data.Entities
 {
    public class Pagamento
     {
-		[Key]
 
-		#region PrimareKey
-		public int Cod_Pagamento { get; set; }
-		#endregion
+        public Pagamento()
+        {
+
+        }
+
+        public static Pagamento Criar(decimal valor,
+                 DateTime data,
+                 MesReferencia mesReferencia,
+                 Cliente cliente)
+        {
+            var pagamento = new Pagamento()
+            {
+
+                Valor = valor,
+                Data = data,
+                Cod_Cliente = cliente.Cod_Cliente,
+                Cod_MesReferencia = mesReferencia.Cod_MesReferencia,
+
+            };
+            
+            return pagamento;
+        }
 
 
-		#region KeyColumns
+        public void Atualizar(decimal valor,
+           DateTime data,
+           MesReferencia mesReferencia,
+           Cliente cliente)
+        {
+            {
+
+                Valor = valor;
+                Data = data;
+                Cod_Cliente = cliente.Cod_Cliente;
+                Cod_MesReferencia = mesReferencia.Cod_MesReferencia;                
+
+            };
+            
+        }
+
+        public int Cod_Pagamento { get; set; }		
 		public Decimal Valor { get; set; }
-
-		public DateTime Data { get; set; }
-		#endregion
-
-		#region Associacao ForeignKey
-		#endregion
-
-		#region Associacao RefForeignKey
-		[ForeignKey("Cod_MesReferencia")]
+		public DateTime Data { get; set; }	
+		
 		public int Cod_MesReferencia { get; set; }
-		public MesReferencia MesReferencia { get; set; }
 
-		[ForeignKey("Cod_Contrato")]
-		public int Cod_Contrato { get; set; }
-		public Contrato Contrato { get; set; }
-		#endregion
+        public int Cod_Cliente { get; set; }
+        public MesReferencia MesReferencia { get; set; }		
 
-	}
+        public Cliente Cliente { get; set; }        
+
+    }
 }

@@ -3,7 +3,6 @@ using Projeto.Data.Context;
 using Projeto.Data.Entities;
 using Projeto.Data.Extensions;
 using Projeto.Data.Seedwork;
-using Projeto.Data.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +10,18 @@ using System.Text;
 
 namespace Projeto.Data.Services.Implementations
 {
-   public class ContratoService : IContratoService
+    public class PagamentoService : IPagamentoService
     {
         private readonly DataColetrans dataContext;
 
-        public ContratoService(DataColetrans dataContext)
+        public PagamentoService(DataColetrans dataContext)
         {
             this.dataContext = dataContext;
         }
 
-        public CommandResult Atualizar(AtualizarContratoCommand command)
+        public CommandResult Atualizar(AtualizarPagamentoCommand command)
         {
-            string entityName = "Contrato";
+            string entityName = "Pagamento";
             try
             {
                 command.Validate();
@@ -31,11 +30,11 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(command.Notifications.ToNotificationsString());
                 }
 
-                Contrato contrato = dataContext.Contrato.FirstOrDefault(x => x.Cod_Contrato == command.Cod_Contrato);
+                Pagamento pagamento = dataContext.Pagamento.FirstOrDefault(x => x.Cod_Pagamento == command.Cod_Pagamento);
 
-                if (contrato is null)
+                if (pagamento is null)
                 {
-                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Contrato));
+                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Pagamento));
                 }
 
 
@@ -46,16 +45,17 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("Cliente", command.Cod_Cliente));
                 }
 
+                var mesReferencia = dataContext.MesReferencia.FirstOrDefault(x => x.Cod_MesReferencia == command.Cod_MesReferencia);
 
-                contrato.Atualizar(
-                   command.ColetaContratada,
-                   command.ValorLimite,
-                   command.ValorUnidade,                   
-                   DataString.FromNullableString(command.MotivoCancelamento),
-                   command.DataCancelamento,
-                   command.FlagTermino,
-                   command.DataInicio,
-                   command.DataTermino,
+                if (mesReferencia is null)
+                {
+                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("MesReferencia", command.Cod_MesReferencia));
+                }
+
+                pagamento.Atualizar(
+                   command.Valor,
+                   command.Data,
+                   mesReferencia,
                    cliente);
 
                 return CommandResult.Valid();
@@ -68,9 +68,9 @@ namespace Projeto.Data.Services.Implementations
 
         }
 
-        public CommandResult Criar(CriarContratoCommand command)
+        public CommandResult Criar(CriarPagamentoCommand command)
         {
-            string entityName = "Contrato";
+            string entityName = "Pagamento";
             {
                 try
                 {
@@ -87,23 +87,20 @@ namespace Projeto.Data.Services.Implementations
                         return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("Cliente", command.Cod_Cliente));
                     }
 
+                    var mesReferencia = dataContext.MesReferencia.FirstOrDefault(x => x.Cod_MesReferencia == command.Cod_MesReferencia);
 
+                    if (mesReferencia is null)
+                    {
+                        return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("MesReferencia", command.Cod_MesReferencia));
+                    }
 
-                    Contrato contrato = Contrato.Criar(command.ColetaContratada,
-                   command.ValorLimite,
-                   command.ValorUnidade,
-                   DataString.FromNullableString(command.MotivoCancelamento),
-                   command.DataCancelamento,
-                   command.FlagTermino,
-                   command.DataInicio,
-                   command.DataTermino,
+                    Pagamento pagamento = Pagamento.Criar(command.Valor,
+                   command.Data,
+                   mesReferencia,
                    cliente);
 
-
-                    dataContext.Add(contrato);
+                    dataContext.Add(pagamento);
                     dataContext.SaveChanges();
-
-
                     return CommandResult.Valid();
                 }
                 catch (Exception ex)
@@ -114,31 +111,22 @@ namespace Projeto.Data.Services.Implementations
             }
         }
 
-        public CommandResult Remover(int cod_Contrato)
+        public CommandResult Remover(int cod_Pagamento)
         {
-            string entityName = "Contrato";
+            string entityName = "Pagamento";
             string commandName = $"Removendo {entityName}";
-
             try
             {
-                Contrato contrato = dataContext.Contrato.FirstOrDefault(x => x.Cod_Contrato == cod_Contrato);
+                Pagamento pagamento = dataContext.Pagamento.FirstOrDefault(x => x.Cod_Pagamento == cod_Pagamento);
 
-                if (contrato is null)
+                if (pagamento is null)
                 {
-                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, cod_Contrato));
-                }
-                
-
-                if (contrato.FlagTermino.Equals("S"))
-                {
-                    string message = "Existe um contrato Ativo, Exclusão não pode ser realizada. ";
-                    return CommandResult.Invalid(message);
+                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, cod_Pagamento));
                 }
 
-                dataContext.Remove(contrato);
+                dataContext.Remove(pagamento);
                 dataContext.SaveChanges();
                 return CommandResult.Valid();
-
             }
             catch (Exception ex)
             {
@@ -146,4 +134,6 @@ namespace Projeto.Data.Services.Implementations
             }
         }
     }
-}
+
+    }
+
