@@ -27,6 +27,13 @@ namespace Projeto.Data.Repository
             return CommandResult<IReadOnlyCollection<MesReferencia>>.Valid(resultado);
         }
 
+        public CommandResult<IReadOnlyCollection<MesReferencia>> ObterMesRefAtivos()
+        {
+            IQueryable<MesReferencia> query = dataContext.MesReferencia.AsNoTracking();
+            var result = query.OrderBy(x => x.MesAno).Select(x => new MesReferencia(x.Cod_MesReferencia, x.MesAno)).ToArray();
+            return CommandResult<IReadOnlyCollection<MesReferencia>>.Valid(result);
+        }
+
         public CommandResult<PaginatedQueryResult<MesReferencia>> ObterPaginado(int pagina, int quantidade, MesReferenciaSort sort, bool ascending, string mesAno)
         {
 

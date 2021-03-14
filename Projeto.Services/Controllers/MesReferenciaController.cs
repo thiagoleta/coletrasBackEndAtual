@@ -139,5 +139,12 @@ namespace Projeto.Services.Controllers
             }
             return Result(resultado);
         }
+
+        [HttpGet("mesativos")]
+        public IActionResult ObterClientesAtivos([FromServices] IMesReferenciaRepository repository)
+        {
+            var resultado = repository.ObterMesRefAtivos();
+            return Result(resultado);
+        }
     }
 }

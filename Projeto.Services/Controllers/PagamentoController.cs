@@ -64,7 +64,7 @@ namespace Projeto.Services.Controllers
 
             [FromQuery] int pagina = 1,
             [FromQuery] int quantidade = 8,
-            [FromQuery] string coluna = "NomeCliente", [FromQuery] string direcao = "asc")
+            [FromQuery] string coluna = "cliente", [FromQuery] string direcao = "asc")
         {
             return Result(repository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, PagamentoSort.NomeCliente),
                 string.IsNullOrEmpty(direcao) || direcao.Equals("asc")));

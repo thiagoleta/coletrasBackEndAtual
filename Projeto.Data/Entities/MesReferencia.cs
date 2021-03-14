@@ -14,6 +14,12 @@ namespace Projeto.Data.Entities
 
         }
 
+        public MesReferencia(int cod_MesReferencia, string mesAno)
+        {
+            this.Cod_MesReferencia = cod_MesReferencia;
+            this.MesAno = mesAno;
+        }
+
         public static MesReferencia Criar(DataString mesAno,
             DateTime dataInicio,
             DateTime? dataTermino,

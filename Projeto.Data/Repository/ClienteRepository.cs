@@ -25,7 +25,6 @@ namespace Projeto.Data.Repository
 
         public CommandResult<IReadOnlyCollection<Cliente>> Obter(ClienteSort sort, bool ascending, DataString? nomeCompleto_RazaoSocial, DataString? cpfCnpj)
         {
-
             
             var resultado = ObterBase(sort, ascending, nomeCompleto_RazaoSocial, cpfCnpj).ToArray();
             

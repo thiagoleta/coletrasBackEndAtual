@@ -14,5 +14,7 @@ namespace Projeto.Data.Contracts
 
         CommandResult<IReadOnlyCollection<MesReferencia>> Obter(MesReferenciaSort sort, bool ascending, string mesAno);
 
+        CommandResult<IReadOnlyCollection<MesReferencia>> ObterMesRefAtivos();
+
     }
 }

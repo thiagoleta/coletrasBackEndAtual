@@ -16,7 +16,8 @@ namespace Projeto.Data.Repository
     {
         private readonly DataColetrans dataContext;
 
-        public PagamentoRepository(DataColetrans dataContext) : base(dataContext) 
+
+        public PagamentoRepository(DataColetrans dataContext) : base(dataContext) //construtor da classe pai..
         {
             this.dataContext = dataContext;
         }
@@ -44,8 +45,11 @@ namespace Projeto.Data.Repository
 
         private IQueryable<Pagamento> ObterBase(PagamentoSort sort, bool ascending)
         {
-            IQueryable<Pagamento> query = dataContext.Pagamento.Include(c => c.Cliente)
-                                                            .Include(c => c.MesReferencia);      
+
+            var query = dataContext.Pagamento.Include(c => c.Cliente)
+                                                                .Include(c => c.MesReferencia).AsNoTracking();          
+
+
 
             switch (sort)
             {
