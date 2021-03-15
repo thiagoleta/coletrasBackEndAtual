@@ -85,6 +85,7 @@ namespace Projeto.Services
             services.AddTransient<IPagamentoService, PagamentoService>();
             services.AddTransient<IDiasColetaRepository, DiasColetaRepository>();
             services.AddTransient<IPerfilRepository, PerfilRepository>();
+            services.AddTransient<IPerfilService, PerfilService>();
             services.AddTransient<IRoteiroService, RoteiroService>();
             services.AddTransient<IRoteiroRepository, RoteiroRepository>();
             services.AddTransient<ITurnoRepository, TurnoRepository>();         

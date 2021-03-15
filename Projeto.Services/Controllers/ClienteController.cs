@@ -29,17 +29,6 @@ namespace Projeto.Services.Controllers
 
     public class ClienteController : ApiControllerBase
     {
-        //atributo
-        private readonly IClienteRepository clienteRepository;
-        private readonly IContratoRepository contratoRepository;
-        private readonly IMapper mapper;
-
-        public ClienteController(IClienteRepository clienteRepository, IContratoRepository contratoRepository, IMapper mapper)
-        {
-            this.clienteRepository = clienteRepository;
-            this.contratoRepository = contratoRepository;
-            this.mapper = mapper;
-        }
 
         [HttpPost]
         public IActionResult Criar(

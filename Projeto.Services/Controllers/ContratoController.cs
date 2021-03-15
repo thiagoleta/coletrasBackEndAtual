@@ -89,9 +89,7 @@ namespace Projeto.Services.Controllers
                     csv.Append($"=\"{x.DataCancelamento}\";");
                     csv.Append($"\"{(x.FlagTermino != null ? (Convert.ToBoolean(x.FlagTermino) ? "Sim" : "Não") : "Não")}\";");
                     csv.Append($"=\"{x.DataTermino}\";");
-                    csv.AppendLine("");
-
-                    //query = query.OrderByDescending(x => x.DataPrazo == null ? 0 : 1).ThenByDescending(x => x.DataPrazo);
+                    csv.AppendLine("");                    
                 }
 
         string nomeArquivo = $"Contrato{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";

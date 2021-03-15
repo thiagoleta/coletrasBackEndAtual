@@ -27,16 +27,7 @@ namespace Projeto.Services.Controllers
     [ApiController]
     public class PagamentoController : ApiControllerBase
     {
-        //atributo
-        private readonly IPagamentoRepository pagamentoRepository;
-        private readonly IMapper mapper;
-
-        public PagamentoController(IPagamentoRepository pagamentoRepository, IMapper mapper)
-        {
-            this.pagamentoRepository = pagamentoRepository;
-            this.mapper = mapper;
-        }
-
+     
         [HttpPost]
         public IActionResult Criar([FromServices] IPagamentoService service, [FromBody] CriarPagamentoCommand command)
         {

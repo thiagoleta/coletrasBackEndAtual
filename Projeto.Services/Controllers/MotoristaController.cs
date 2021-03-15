@@ -28,19 +28,7 @@ namespace Projeto.Services.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class MotoristaController : ApiControllerBase
-    {
-      
-        private readonly IMotoristaRepository motoristaRepository;
-        private readonly IRotaRepository rotaRepository;
-        private readonly IMapper mapper;
-
-        public MotoristaController(IMotoristaRepository motoristaRepository, IRotaRepository rotaRepository, IMapper mapper)
-        {
-            this.motoristaRepository = motoristaRepository;
-            this.rotaRepository = rotaRepository;
-            this.mapper = mapper;
-        }
-            
+    {     
 
         [HttpPost]
         public IActionResult Criar(

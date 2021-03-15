@@ -26,15 +26,6 @@ namespace Projeto.Services.Controllers
     [ApiController]
     public class RoteiroController : ApiControllerBase
     {
-        
-        private readonly IRoteiroRepository rotreiroRepository;
-        private readonly IMapper mapper;
-
-        public RoteiroController(IRoteiroRepository rotreiroRepository, IMapper mapper)
-        {
-            this.rotreiroRepository = rotreiroRepository;
-            this.mapper = mapper;
-        }
 
         [HttpPost]
         public IActionResult Criar([FromServices] IRoteiroService service, [FromBody] CriarRoteiroCommand command)

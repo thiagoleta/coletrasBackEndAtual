@@ -25,14 +25,7 @@ namespace Projeto.Services.Controllers
     [ApiController]
     public class MaterialController : ApiControllerBase
     {
-        //atributo
-        private readonly IMaterialRepository materialRepository;
-
-        public MaterialController(IMaterialRepository materialRepository)
-        {
-            this.materialRepository = materialRepository;
-        }
-
+ 
         [HttpPost]
         public IActionResult Criar(
                 [FromServices] IMaterialService service,

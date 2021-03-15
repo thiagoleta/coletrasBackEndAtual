@@ -30,17 +30,8 @@ namespace Projeto.Services.Controllers
     [ApiController]
     public class MesReferenciaController : ApiControllerBase
     {
-        public const string FORMATO_DATA_PADRAO = "dd/MM/yyyy";
-        //atributo
-        private readonly IMesReferenciaRepository mesreferenciaRepository;
-        private readonly IMapper mapper;
-
-        public MesReferenciaController(IMesReferenciaRepository mesreferenciaRepository, IMapper mapper)
-        {
-            this.mesreferenciaRepository = mesreferenciaRepository;
-            this.mapper = mapper;
-        }
-
+        public const string FORMATO_DATA_PADRAO = "dd/MM/yyyy";        //atributo
+        
 
         [HttpPost]
         public IActionResult Criar(

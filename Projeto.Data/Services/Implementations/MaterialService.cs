@@ -23,8 +23,7 @@ namespace Projeto.Data.Services.Implementations
         public CommandResult Atualizar(AtualizarMaterialCommand command)
         {
 
-            string entityName = "Material";
-            
+            string entityName = "Material";            
             try
             {
                 command.Validate();

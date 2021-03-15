@@ -28,17 +28,7 @@ namespace Projeto.Services.Controllers
     [ApiController]
     public class RotaController : ApiControllerBase
     {
-        //atributo
-        private readonly IRotaRepository rotaRepository;        
-        private readonly IMapper mapper;
-
-        public RotaController(IRotaRepository rotaRepository, IMapper mapper)
-        {
-            this.rotaRepository = rotaRepository;
-            this.mapper = mapper;
-        }
-
-        
+    
         [HttpGet]
         public IActionResult ObterPaginado(
       [FromServices] IRotaRepository rotaRepository,

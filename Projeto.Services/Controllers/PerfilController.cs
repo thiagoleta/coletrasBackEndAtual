@@ -1,170 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Data.Commands;
 using Projeto.Data.Contracts;
 using Projeto.Data.Entities;
+using Projeto.Data.Extensions;
+using Projeto.Data.Repository.Sorts;
+using Projeto.Data.Seedwork;
+using Projeto.Data.Services;
+using Projeto.Data.ValueObjects;
 using Projeto.Services.Models.Perfil;
 
 namespace Projeto.Services.Controllers
 {
 
-    [Authorize("Bearer")]
+    [AllowAnonymous]
+    //[Authorize("Bearer")]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class PerfilController : ControllerBase
+    public class PerfilController : ApiControllerBase
     {
-        private readonly IPerfilRepository perfilRepository;
-        private readonly IMapper mapper;
-
-        public PerfilController(IPerfilRepository perfilRepository, IMapper mapper)
-        {
-            this.perfilRepository = perfilRepository;
-            this.mapper = mapper;
-        }
 
         [HttpPost]
-        public IActionResult Post(PerfilCadastroModel model)
+        public IActionResult Criar(
+           [FromServices] IPerfilService service,
+           [FromBody] CriarPerfilCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var perfil = mapper.Map<Perfil>(model);
-                    perfilRepository.Inserir(perfil);
-
-                    var result = new
-                    {
-                        message = "Perfil cadastrado com sucesso",
-                        perfil
-                    };
-
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+            return Result(service.Criar(command));
         }
 
 
         [HttpPut]
-        public IActionResult Put(PerfilEdicaoModel model)
+        public IActionResult Atualizar([FromServices] IPerfilService service, [FromBody] AtualizarPerfilCommand command)
         {
-            //verificando se os campos da model passaram nas ões
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var perfil = mapper.Map<Perfil>(model);
-                    perfilRepository.Alterar(perfil);
+            return Result(service.Atualizar(command));
+        }
 
-                    var result = new
-                    {
-                        message = "Perfil atualizado com sucesso",
-                        perfil
-                    };
 
-                    return Ok(result); //HTTP 200 (SUCESSO!)
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Erro: " + e.Message);
-                }
-            }
-            else
-            {
-                //Erro HTTP 400 (BAD REQUEST)
-                return BadRequest("Ocorreram erros de validação.");
-            }
+        [HttpDelete("{cod_Perfil}")]
+        public IActionResult Remover(
+                              [FromServices] IPerfilService service,
+                              [FromRoute] int cod_Perfil)
+        {
+            return Result(service.Remover(cod_Perfil));
         }
 
         [HttpGet]
-        [Produces(typeof(List<PerfilConsultaModel>))]
-        public IActionResult GetAll()
+        public IActionResult ObterPaginado([FromServices] IPerfilRepository repository,
+
+                 [FromQuery] int pagina = 1,
+                 [FromQuery] int quantidade = 8,
+                 [FromQuery] string coluna = "nomePerfil", [FromQuery] string direcao = "asc")
         {
-            try
-            {
-                var result = perfilRepository.Consultar();
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
-        }
-
-        [HttpGet("{id}")]
-        [Produces(typeof(PerfilConsultaModel))]
-        public IActionResult GetById(int id)
-        {
-            try
-            {
-                var result = perfilRepository.ObterPorId(id);
-
-                if (result != null) //se o OS foi encontrado..
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return NoContent(); //HTTP 204 (SUCESSO -> Vazio)
-                }
-            }
-
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(repository.ObterPaginado(pagina, quantidade, EnumHelpers.ParseOrDefault(coluna, PerfilSort.NomePerfil),
+                string.IsNullOrEmpty(direcao) || direcao.Equals("asc")));
         }
 
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpGet("exportar")]
+        public IActionResult Exportar([FromServices] IPerfilRepository repository,
+                                     [FromQuery] string coluna = "nomePerfil",
+                                     [FromQuery] string direcao = "asc",
+                                     [FromQuery] string nomePerfil = null)
         {
+            var resultado = repository.Obter(EnumHelpers.ParseOrDefault(coluna, PerfilSort.NomePerfil),
+             string.IsNullOrEmpty(direcao) || direcao.Equals("asc"));
 
-            try
+            if (resultado.Tipo == ResultType.Valid)
             {
-                //buscar o OS referente ao id informado..
-                var perfil = perfilRepository.ObterPorId(id);
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("COD_ROTA; NOME; COMPOSIÇÃO DA ROTA; ATIVO; OBSERVAÇÃO");
 
-                //verificar se o OS foi encontrado..
-                if (perfil != null)
+                foreach (var x in resultado.Dados)
                 {
-                    //excluindo o OS
-                    perfilRepository.Excluir(perfil);
-
-                    var result = new
-                    {
-                        message = "Perfil excluído com sucesso.",
-                        perfil
-                    };
-
-                    return Ok(result);
+                    csv.Append($"\"{x.Cod_Perfil}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome_Perfil) ? x.Nome_Perfil : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Usuario.Nome) ? x.Usuario.Nome : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Usuario.Email) ? x.Usuario.Email : string.Empty)}\";");                    
+                    csv.AppendLine("");
                 }
-                else
-                {
-                    return BadRequest("Perfil não encontrado.");
-                }
+
+                string nomeArquivo = $"Perfil{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.csv";
+                byte[] bytes = Encoding.UTF8.GetBytes(csv.ToString());
+                bytes = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                return File(bytes, "text/csv", nomeArquivo);
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Erro: " + e.Message);
-            }
+            return Result(resultado);
         }
+
 
     }
 }
