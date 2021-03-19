@@ -47,9 +47,7 @@ namespace Projeto.Data.Repository
         {
 
             var query = dataContext.Pagamento.Include(c => c.Cliente)
-                                                                .Include(c => c.MesReferencia).AsNoTracking();          
-
-
+                                                                .Include(c => c.MesReferencia).AsNoTracking(); 
 
             switch (sort)
             {

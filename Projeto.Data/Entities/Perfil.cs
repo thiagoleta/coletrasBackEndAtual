@@ -13,32 +13,30 @@ namespace Projeto.Data.Entities
 
         }
 
-        public static Perfil Criar(DataString nome_Perfil,
-                            Usuario usuario)
+        public Perfil(int cod_Perfil, string nome_Perfil)
+        {
+            this.Cod_Perfil = cod_Perfil;
+            this.Nome_Perfil = nome_Perfil;
+        }
+
+        public static Perfil Criar(DataString nome_Perfil)
         
         {
             var perfil = new Perfil
             {
-                Nome_Perfil = nome_Perfil,
-                Cod_Perfil = usuario.Cod_Usuario,
+                Nome_Perfil = nome_Perfil,                
             };
 
             return perfil;
         }
 
-        public void Atualizar(DataString nome_Perfil,
-                                 Usuario usuario) 
+        public void Atualizar(DataString nome_Perfil) 
         {
-            Nome_Perfil = nome_Perfil;
-            Cod_Usuario = usuario.Cod_Usuario;
+            Nome_Perfil = nome_Perfil;            
         }
 
         public int Cod_Perfil { get; set; }
         public string Nome_Perfil { get; set; }
-        public int Cod_Usuario { get; set; }
-
-        public Usuario Usuario { get; set; }
-
         
     }
 }

@@ -44,7 +44,7 @@ namespace Projeto.Services.Controllers
                 {
                     //buscar no repositorio se existe algum 
                     //usuario com o email e a senha informados..
-                    var usuario = usuarioRepository.Obter(model.Email,Criptografia.MD5Encrypt(model.Senha));
+                    var usuario = usuarioRepository.Obter(model.Email, Criptografia.MD5Encrypt(model.Senha));
 
                     //verificar se o usuario foi encontrado..
                     if (usuario != null)
@@ -64,14 +64,15 @@ namespace Projeto.Services.Controllers
 
                             var handler = new JwtSecurityTokenHandler();
                             var securityToken = handler.CreateToken
-                                (new SecurityTokenDescriptor{  Issuer = tokenConfiguration.Issuer, Audience = tokenConfiguration.Audience,    SigningCredentials = loginConfiguration.SigningCredentials,Subject = identity,NotBefore = dataCriacao, Expires = dataExpiracao});
+                                (new SecurityTokenDescriptor { Issuer = tokenConfiguration.Issuer, Audience = tokenConfiguration.Audience, SigningCredentials = loginConfiguration.SigningCredentials, Subject = identity, NotBefore = dataCriacao, Expires = dataExpiracao });
 
                             //gerando o token
                             var token = handler.WriteToken(securityToken);
 
                             var result = new
                             {
-                                mensagem = "Usuário autenticado com sucesso.",token, //TOKEN DE ACESSO!
+                                mensagem = "Usuário autenticado com sucesso.",
+                                token, //TOKEN DE ACESSO!
                                 criadoEm = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
                                 expiraEm = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss")
                             };

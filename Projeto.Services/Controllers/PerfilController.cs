@@ -77,14 +77,12 @@ namespace Projeto.Services.Controllers
             if (resultado.Tipo == ResultType.Valid)
             {
                 StringBuilder csv = new StringBuilder();
-                csv.AppendLine("COD_ROTA; NOME; COMPOSIÇÃO DA ROTA; ATIVO; OBSERVAÇÃO");
+                csv.AppendLine("COD_PERFIL;NOME");
 
                 foreach (var x in resultado.Dados)
                 {
                     csv.Append($"\"{x.Cod_Perfil}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome_Perfil) ? x.Nome_Perfil : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Usuario.Nome) ? x.Usuario.Nome : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Usuario.Email) ? x.Usuario.Email : string.Empty)}\";");                    
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome_Perfil) ? x.Nome_Perfil : string.Empty)}\";");                                    
                     csv.AppendLine("");
                 }
 
@@ -96,6 +94,11 @@ namespace Projeto.Services.Controllers
             return Result(resultado);
         }
 
-
+        [HttpGet("perfil")]
+        public IActionResult ObterPerfil([FromServices] IPerfilRepository repository)
+        {
+            var resultado = repository.ObterPerfil();
+            return Result(resultado);
+        }
     }
 }

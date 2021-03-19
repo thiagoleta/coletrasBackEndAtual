@@ -13,5 +13,8 @@ namespace Projeto.Data.Contracts
         CommandResult<PaginatedQueryResult<Perfil>> ObterPaginado(int pagina, int quantidade, PerfilSort sort, bool ascending);
 
         CommandResult<IReadOnlyCollection<Perfil>> Obter(PerfilSort sort, bool ascending);
+
+        CommandResult<IReadOnlyCollection<Perfil>> ObterPerfil();
     }
+
 }

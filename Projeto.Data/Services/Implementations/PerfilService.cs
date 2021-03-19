@@ -35,21 +35,11 @@ namespace Projeto.Data.Services.Implementations
 
                 if (perfil is null)
                 {
-
-                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Usuario));
+                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Perfil));
                 }
 
-                Usuario usuario = dataContext.Usuario.FirstOrDefault(x => x.Cod_Usuario == command.Cod_Usuario);
-
-                if (usuario is null)
-                {
-
-                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Usuario));
-                }
-
-                perfil.Atualizar(                   
-                   DataString.FromString(command.Nome_Perfil),
-                   usuario);
+                perfil.Atualizar(
+                   DataString.FromString(command.Nome_Perfil));
 
                 dataContext.SaveChanges();
                 return CommandResult.Valid();
@@ -71,17 +61,7 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(command.Notifications.ToNotificationsString());
                 }
 
-                Usuario usuario = dataContext.Usuario.FirstOrDefault(x => x.Cod_Usuario == command.Cod_Usuario);
-
-                if (usuario is null)
-                {
-
-                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Usuario));
-                }
-
-
-                Perfil perfil = Perfil.Criar(DataString.FromString(command.Nome_Perfil),
-                    usuario);
+                Perfil perfil = Perfil.Criar(DataString.FromString(command.Nome_Perfil));
 
                 dataContext.Add(perfil);
                 dataContext.SaveChanges();

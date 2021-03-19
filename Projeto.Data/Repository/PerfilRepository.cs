@@ -20,15 +20,6 @@ namespace Projeto.Data.Repository
         {
             this.dataContext = dataContext;
         }
-
-        public override List<Perfil> Consultar()
-        {
-            //fazendo JOIN com a entidade Motorista
-            return dataContext.Perfil
-                    .Include(p => p.Usuario) //JOIN..
-                    .ToList();
-        }
-
         public CommandResult<IReadOnlyCollection<Perfil>> Obter(PerfilSort sort, bool ascending)
         {
             var resultado = ObterBase(sort, ascending).ToArray();
@@ -50,35 +41,31 @@ namespace Projeto.Data.Repository
             return CommandResult<PaginatedQueryResult<Perfil>>.Valid(resultado);
         }
 
+        public CommandResult<IReadOnlyCollection<Perfil>> ObterPerfil()
+        {
+            IQueryable<Perfil> query = dataContext.Perfil.AsNoTracking();            
+            var result = query.OrderBy(x => x.Nome_Perfil).Select(x => new Perfil(x.Cod_Perfil, x.Nome_Perfil)).ToArray();
+            return CommandResult<IReadOnlyCollection<Perfil>>.Valid(result);
+        }
+
         private IQueryable<Perfil> ObterBase(PerfilSort sort, bool ascending)
         {
-            IQueryable<Perfil> query = dataContext.Perfil.Include(c => c.Usuario);
+            IQueryable<Perfil> query = dataContext.Perfil.AsNoTracking();
 
-
-
+          
             switch (sort)
             {
 
-                case PerfilSort.UsuarioNome:
+                case PerfilSort.Cod_Perfil:
                     if (ascending)
                     {
-                        query = query.OrderBy(a => a.Usuario.Nome).ThenBy(a => a.Usuario.Nome);
+                        query = query.OrderBy(a => a.Cod_Perfil).ThenBy(a => a.Cod_Perfil);
                     }
                     else
                     {
-                        query = query.OrderByDescending(a => a.Usuario.Nome).ThenByDescending(a => a.Usuario.Nome);
+                        query = query.OrderByDescending(a => a.Cod_Perfil).ThenByDescending(a => a.Cod_Perfil);
                     }
-                    break;
-                case PerfilSort.UsuarioEmail:
-                    if (ascending)
-                    {
-                        query = query.OrderBy(a => a.Usuario.Email).ThenBy(a => a.Usuario.Email);
-                    }
-                    else
-                    {
-                        query = query.OrderByDescending(a => a.Usuario.Email).ThenByDescending(a => a.Usuario.Email);
-                    }
-                    break;  
+                    break;                
                 case PerfilSort.NomePerfil:
                 default:
                     if (ascending)

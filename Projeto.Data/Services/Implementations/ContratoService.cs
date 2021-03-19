@@ -38,7 +38,6 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, command.Cod_Contrato));
                 }
 
-
                 var cliente = dataContext.Cliente.FirstOrDefault(x => x.Cod_Cliente == command.Cod_Cliente);
 
                 if (cliente is null)
@@ -46,20 +45,19 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("Cliente", command.Cod_Cliente));
                 }
 
-
                 contrato.Atualizar(
                    command.ColetaContratada,
                    command.ValorLimite,
                    command.ValorUnidade,                   
                    DataString.FromNullableString(command.MotivoCancelamento),
                    command.DataCancelamento,
-                   command.FlagTermino,
+                   DataString.FromString(command.FlagTermino),
                    command.DataInicio,
                    command.DataTermino,
                    cliente);
-
+                
+                dataContext.SaveChanges();
                 return CommandResult.Valid();
-
             }
             catch (Exception ex)
             {
@@ -127,7 +125,14 @@ namespace Projeto.Data.Services.Implementations
                 {
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, cod_Contrato));
                 }
-                
+
+                OS os = dataContext.OS.FirstOrDefault(x => x.Cod_Contrato == cod_Contrato);
+
+                if (os !=null)
+                {
+                    string message = "Existe uma Os, para este contrato. ";
+                    return CommandResult.Invalid(message);
+                }
 
                 if (contrato.FlagTermino.Equals("S"))
                 {

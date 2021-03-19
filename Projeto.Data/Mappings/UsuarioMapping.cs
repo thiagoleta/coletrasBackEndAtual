@@ -10,12 +10,17 @@ namespace Projeto.Data.Mappings
     public class UsuarioMapping : IEntityTypeConfiguration<Usuario>
     {
         public void Configure(EntityTypeBuilder<Usuario> builder)
-        {
-            //nome da tabela no banco de dados (opcional)
-            builder.ToTable("Usuario");
+        {            
+            builder.ToTable("Usuario");                              
+            builder.HasKey(u => u.Cod_Usuario);           
+            builder.Property(u => u.Nome).HasColumnName("Nome");
+            builder.Property(u => u.Email).HasColumnName("Email");
+            builder.Property(u => u.Senha).HasColumnName("Senha");
+            builder.Property(u => u.DataCriacao).HasColumnName("DataCriacao");
 
-            //chave primmariA da tabela                        
-            builder.HasKey(u => u.Cod_Usuario);
+
+            builder.Property(u => u.Cod_Perfil);
+            builder.HasOne(u => u.Perfil).WithMany().HasForeignKey(c => c.Cod_Perfil);
         }
     }
 }

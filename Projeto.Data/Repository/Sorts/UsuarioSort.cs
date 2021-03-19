@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Projeto.Data.Repository.Sorts
 {
-   public enum PerfilSort
+  public enum UsuarioSort
     {
-        Cod_Perfil,
-        NomePerfil
-        
-
+        Nome,
+        Email,
+        Perfil        
     }
 }

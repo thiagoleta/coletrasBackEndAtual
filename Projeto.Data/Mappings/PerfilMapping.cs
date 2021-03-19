@@ -15,13 +15,9 @@ namespace Projeto.Data.Mappings
             builder.ToTable("Perfil");
 
             //chave primmariA da tabela                        
-            builder.HasKey(p => p.Cod_Perfil);
-            builder.Property(p => p.Cod_Usuario).HasColumnName("Cod_Usuario").IsRequired();
+            builder.HasKey(p => p.Cod_Perfil);            
             builder.Property(x => x.Nome_Perfil).HasColumnName("Nome_Perfil");
-            #region MyRegion
-
-            builder.HasOne(p => p.Usuario).WithMany().HasForeignKey(c => c.Cod_Usuario);
-            #endregion
+            
 
 
         }

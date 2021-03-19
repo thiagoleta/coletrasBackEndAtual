@@ -26,7 +26,7 @@ namespace Projeto.Data.Mappings
             builder.Property(c => c.ValorLimite).HasColumnName("Valor_Limite");
             builder.Property(c => c.ValorUnidade).HasColumnName("Valor_Unidade");           
                         
-            builder.Property(c => c.FlagTermino).HasColumnName("Flag_Termino").HasConversion(ValueConverters.BoolToString).HasDefaultValue(false);
+            builder.Property(c => c.FlagTermino).HasColumnName("Flag_Termino");
             builder.Property(x => x.MotivoCancelamento).HasColumnName("Motivo_Cancelamento");
             builder.Property(x => x.DataCancelamento).HasColumnName("Data_Cancelamento");
 

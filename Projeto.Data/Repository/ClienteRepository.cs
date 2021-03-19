@@ -33,8 +33,9 @@ namespace Projeto.Data.Repository
 
         public CommandResult<IReadOnlyCollection<Cliente>> ObterClientesAtivos()
         {   
-            IQueryable<Cliente> query = dataContext.Cliente.AsNoTracking();   
-            var result = query.OrderBy(x => x.NomeCompleto_RazaoSocial).Select(x => new Cliente(x.Cod_Cliente, x.NomeCompleto_RazaoSocial)).ToArray();            
+            IQueryable<Cliente> query = dataContext.Cliente.AsNoTracking();
+            query = query.Where(x => x.Flag_Ativo.Equals(true));
+            var result = query.OrderBy(x => x.NomeCompleto_RazaoSocial).Select(x => new Cliente(x.Cod_Cliente, x.NomeCompleto_RazaoSocial)).ToArray();
             return CommandResult<IReadOnlyCollection<Cliente>>.Valid(result);
         }
 

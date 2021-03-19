@@ -88,7 +88,9 @@ namespace Projeto.Services
             services.AddTransient<IPerfilService, PerfilService>();
             services.AddTransient<IRoteiroService, RoteiroService>();
             services.AddTransient<IRoteiroRepository, RoteiroRepository>();
-            services.AddTransient<ITurnoRepository, TurnoRepository>();         
+            services.AddTransient<ITurnoRepository, TurnoRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IUsuarioService, UsuarioService>();
 
 
 
@@ -100,11 +102,11 @@ namespace Projeto.Services
 
             var connectionString = Configuration.GetConnectionString("Coletrans");
 
-            //mapear as interfaces e classe criadas no repositorio
+          //  mapear as interfaces e classe criadas no repositorio
 
 
-            services.AddTransient<IUsuarioRepository, UsuarioRepository>
-               (map => new UsuarioRepository(connectionString));
+            //services.AddTransient<IUsuarioRepository, UsuarioRepository>
+            //   (map => new UsuarioRepository(connectionString));
             #endregion
 
 

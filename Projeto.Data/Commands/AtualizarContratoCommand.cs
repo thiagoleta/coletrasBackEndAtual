@@ -14,7 +14,7 @@ namespace Projeto.Data.Commands
 
 		public string MotivoCancelamento { get; set; }
 		public DateTime? DataCancelamento { get; set; }
-		public bool? FlagTermino { get; set; }
+		public string FlagTermino { get; set; }
 		public DateTime DataInicio { get; set; }
 		public DateTime? DataTermino { get; set; }
 
