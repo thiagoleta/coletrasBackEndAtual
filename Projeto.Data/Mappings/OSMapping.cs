@@ -13,16 +13,32 @@ namespace Projeto.Data.Mappings
         {
             //nome da tabela no banco de dados (opcional)
             builder.ToTable("OS");
-
-            //chave primA?ria da tabela
-            //para o EF, todo campo int que for definido como chave primA?ria
-            //jA? A© criado como identity (auto-incremento)
             builder.HasKey(o => o.Cod_OS);
 
-            #region Mapeamento dos Relacionamentos
+            builder.Property(x => x.Data_Geracao).HasColumnName("Data_Geracao");
+            builder.Property(x => x.Data_Coleta).HasColumnName("Data_Coleta");
+            builder.Property(x => x.Quantidade_Coletada).HasColumnName("Quantidade_Coletada");
             
-            builder.Property(o => o.Cod_Contrato);
-            builder.HasOne(o => o.Contrato).WithMany().HasForeignKey(o => o.Cod_Contrato);
+            builder.Property(x => x.Hora_Entrada).HasColumnName("Hora_Entrada");
+            builder.Property(x => x.Hora_Saida).HasColumnName("Hora_Saida");
+            builder.Property(x => x.Placa).HasColumnName("Placa");
+            builder.Property(x => x.Motivo_Cancelamento).HasColumnName("Motivo_Cancelamento");
+            builder.Property(x => x.Data_Cancelamento).HasColumnName("Data_Cancelamento");
+            builder.Property(c => c.Flag_Coleta).HasColumnName("Flag_Coleta");
+            builder.Property(c => c.Flag_Envio_Email).HasColumnName("Flag_Envio_Email");
+            builder.Property(c => c.Flag_Cancelado).HasColumnName("Flag_Cancelado");
+
+
+            builder.Property(c => c.Cod_Motorista).HasColumnName("Cod_Motorista").HasDefaultValue(null);
+            builder.Property(c => c.Cod_Material).HasColumnName("Cod_Material").HasDefaultValue(null);
+
+            builder.Property(c => c.Cod_MesReferencia).HasColumnName("Cod_MesReferencia").HasDefaultValue(null);
+            builder.Property(c => c.Cod_Cliente).HasColumnName("Cod_Cliente").HasDefaultValue(null);
+
+
+            #region Mapeamento dos Relacionamentos
+
+
 
             builder.Property(o => o.Cod_MesReferencia);
             builder.HasOne(o => o.MesReferencia).WithMany().HasForeignKey(o=> o.Cod_MesReferencia);
@@ -30,8 +46,13 @@ namespace Projeto.Data.Mappings
             builder.Property(c => c.Cod_Cliente);
             builder.HasMany(c => c.Clientes).WithOne().HasForeignKey(c => c.Cod_Cliente);
 
-            builder.Property(con => con.Cod_Configuracao);
-            builder.HasOne(con => con.Configuracao).WithMany().HasForeignKey(con => con.Cod_Configuracao);
+
+            builder.Property(o => o.Cod_Material);
+            builder.HasOne(o => o.Material).WithMany().HasForeignKey(o => o.Cod_Material);
+
+            builder.Property(o => o.Cod_Motorista);
+            builder.HasOne(o => o.Motorista).WithMany().HasForeignKey(o => o.Cod_Motorista);
+
 
             #endregion
 

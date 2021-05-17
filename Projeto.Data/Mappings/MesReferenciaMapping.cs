@@ -20,6 +20,7 @@ namespace Projeto.Data.Mappings
             builder.Property(x => x.DataInicio).HasColumnName("Data_Inicio");
             builder.Property(x => x.DataTermino).HasColumnName("Data_Termino");
             builder.Property(x => x.Ativo).HasColumnName("Flag_Encerramento").HasConversion(ValueConverters.BoolToString).HasDefaultValue(false);
+            //builder.Property(c => c.Ativo).HasColumnName("Flag_Encerramento");
 
 
         }

@@ -43,7 +43,16 @@ namespace Projeto.Data.Services.Implementations
 
                 if (perfil is null)
                 {
-                    string message = $"Não Existe Perfil para esta usuário";
+                    string message = $"Não Existe Perfil para este usuário";
+                    return CommandResult.Invalid(message);
+                }
+
+
+                var verificaEmail = dataContext.Usuario.FirstOrDefault(x => x.Email.Equals(command.Email));
+
+                if (verificaEmail != null)
+                {
+                    string message = $"O email informado já encontra-se cadastrado";
                     return CommandResult.Invalid(message);
                 }
 

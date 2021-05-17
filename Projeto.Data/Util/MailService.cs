@@ -19,7 +19,7 @@ namespace Projeto.Services.Util
         }
 
         //método para enviar o email
-        public void SendMail(string email, string subject, string body)
+        public  void SendMail(string email, string subject, string body)
         {
             //montando a mensagem de email..
             var mail = new MailMessage(mailSettings.EmailAddress, email);

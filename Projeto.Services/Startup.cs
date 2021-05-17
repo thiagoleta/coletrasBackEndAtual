@@ -81,6 +81,7 @@ namespace Projeto.Services
             services.AddTransient<IMesReferenciaRepository, MesReferenciaRepository>();
             services.AddTransient<IMesReferenciaService, MesReferenciaService>();
             services.AddTransient<IOSRepository, OSRepository>();
+            services.AddTransient<IOsServices, OsService>();
             services.AddTransient<IPagamentoRepository, PagamentoRepository>();
             services.AddTransient<IPagamentoService, PagamentoService>();
             services.AddTransient<IDiasColetaRepository, DiasColetaRepository>();

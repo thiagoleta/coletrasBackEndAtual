@@ -126,14 +126,6 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada(entityName, cod_Contrato));
                 }
 
-                OS os = dataContext.OS.FirstOrDefault(x => x.Cod_Contrato == cod_Contrato);
-
-                if (os !=null)
-                {
-                    string message = "Existe uma Os, para este contrato. ";
-                    return CommandResult.Invalid(message);
-                }
-
                 if (contrato.FlagTermino.Equals("S"))
                 {
                     string message = "Existe um contrato Ativo, Exclusão não pode ser realizada. ";

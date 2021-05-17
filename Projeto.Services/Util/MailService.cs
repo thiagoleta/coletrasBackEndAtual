@@ -25,6 +25,7 @@ namespace Projeto.Services.Util
             var mail = new MailMessage(mailSettings.EmailAddress, email);
             mail.Subject = subject; //assunto
             mail.Body = body; //corpo do email
+            mail.IsBodyHtml = true;
 
             //enviando o email..
             var client = new SmtpClient(mailSettings.Smtp, mailSettings.Port);
