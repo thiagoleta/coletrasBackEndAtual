@@ -21,8 +21,7 @@ using Projeto.Services.Models.Cliente;
 
 namespace Projeto.Services.Controllers
 {
-    //[Authorize("Bearer")]
-    [AllowAnonymous]
+    [Authorize("Bearer")]    
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]

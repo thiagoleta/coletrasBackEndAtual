@@ -19,7 +19,7 @@ using Projeto.Data.Commands;
 namespace Projeto.Services.Controllers
 {
 
-    [AllowAnonymous]
+    [Authorize("Bearer")]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]

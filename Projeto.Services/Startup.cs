@@ -178,12 +178,6 @@ namespace Projeto.Services
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            // Definindo a cultura padrão: pt-BR
             var supportedCultures = new[] { new CultureInfo("pt-BR") };
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
@@ -191,6 +185,12 @@ namespace Projeto.Services
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }     
+       
 
             #region Swagger
 

@@ -22,8 +22,7 @@ using Projeto.Services.Models.Motorista;
 
 namespace Projeto.Services.Controllers
 {
-    //[Authorize("Bearer")]
-    [AllowAnonymous]
+   [Authorize("Bearer")]   
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
