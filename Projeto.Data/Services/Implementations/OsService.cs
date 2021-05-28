@@ -82,21 +82,19 @@ namespace Projeto.Data.Services.Implementations
                              motorista,
                              command.Quantidade_Coletada,
                              command.Data_Coleta,
-                             DataString.FromString(command.Flag_Coleta),
-                             DataString.FromString(command.Flag_Envio_Email),
-                             DataString.FromString(command.Flag_Cancelado),
+                             command.Flag_Coleta,
+                             command.Flag_Envio_Email,
+                             command.Flag_Cancelado,
                              DataString.FromNullableString(command.Motivo_Cancelamento),
                              command.Data_Cancelamento,
                              DataString.FromNullableString(command.Hora_Entrada),
-                             DataString.FromNullableString(command.Hora_Saida),
-                             DataString.FromNullableString(command.Placa));
+                             DataString.FromNullableString(command.Hora_Saida));
 
                 if (command.Flag_Envio_Email.Equals("S"))
                 {
                     EnviarEmailOs(cliente.NomeCompleto_RazaoSocial, cliente.Endereco,
                                   command.Data_Coleta,command.Hora_Entrada, command.Hora_Saida,
-                                  motorista.Nome, material.Descricao, command.Quantidade_Coletada,
-                                  command.Placa, cliente.Email);
+                                  motorista.Nome, material.Descricao, command.Quantidade_Coletada, cliente.Email);
                 }
 
                 dataContext.SaveChanges();
@@ -189,7 +187,7 @@ namespace Projeto.Data.Services.Implementations
         private void EnviarEmailOs(string NomeCompletoRazaoSocialCliente,
                                         string EnderecoCliente, DateTime? DataColeta,
                                         string horaEntrada, string horaSaida, string nomeMotorista,
-                                        string material, int? quatidadeColeta, string placa, string emailCliente)
+                                        string material, int? quatidadeColeta, string emailCliente)
         {
             var assunto = "Guia de OS - Coletrans";
 
@@ -213,7 +211,7 @@ namespace Projeto.Data.Services.Implementations
             corpoemail.AppendLine("</tr>");
             corpoemail.AppendLine("<tr>");
             corpoemail.AppendLine($"<td style='width: 297px;'>Data:&nbsp; {DataColeta}</td>");
-            corpoemail.AppendLine($"<td style='width: 307px;'>Placa : {placa}</td>");
+            //corpoemail.AppendLine($"<td style='width: 307px;'>Placa : {placa}</td>");
             corpoemail.AppendLine("</tr>");
             corpoemail.AppendLine($"<td style='width: 297px;'>Motorista : {nomeMotorista}</td>");
             corpoemail.AppendLine("<td style='width: 307px;'>&nbsp;</td>");

@@ -91,6 +91,12 @@ namespace Projeto.Data.Repository
                         query = query.OrderByDescending(x => x.Quantidade_Coletada == null ? 0 : 1).ThenByDescending(x => x.Quantidade_Coletada);
                         break;
                     }
+                case OsSort.MaterialDesc:
+                    {
+                        query = ascending ? query.OrderBy(x => x.Material.Descricao == null ? 0 : 1).ThenBy(x => x.Material.Descricao) :
+                        query = query.OrderByDescending(x => x.Material.Descricao == null ? 0 : 1).ThenByDescending(x => x.Material.Descricao);
+                        break;
+                    }
                 case OsSort.Data_Coleta:
                     {
                         query = ascending ? query.OrderBy(x => x.Data_Coleta == null ? 0 : 1).ThenBy(x => x.Data_Coleta) :
@@ -117,8 +123,8 @@ namespace Projeto.Data.Repository
                     }
                 case OsSort.Placa:
                     {
-                        query = ascending ? query.OrderBy(x => x.Placa == null ? 0 : 1).ThenBy(x => x.Placa) :
-                        query = query.OrderByDescending(x => x.Placa == null ? 0 : 1).ThenByDescending(x => x.Placa);
+                        query = ascending ? query.OrderBy(x => x.Motorista.Placa == null ? 0 : 1).ThenBy(x => x.Motorista.Placa) :
+                        query = query.OrderByDescending(x => x.Motorista.Placa == null ? 0 : 1).ThenByDescending(x => x.Motorista.Placa);
                         break;
                     }
                 case OsSort.Flag_Cancelado:

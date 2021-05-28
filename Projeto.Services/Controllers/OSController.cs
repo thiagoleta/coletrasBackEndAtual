@@ -81,11 +81,11 @@ namespace Projeto.Services.Controllers
             if (resultado.Tipo == ResultType.Valid)
             {
                 StringBuilder csv = new StringBuilder();
-                csv.AppendLine("COD_OS;NOME CLIENTE;FANTASIA;INSCRIÇÃO ESTADUAL;ENDEREÇO;TELEFONES;EMAIL;MÊS/ANO;DATA DA GERAÇÃO OS;NOME MOTORISTA;QUANTIDADE COLETADA;DATA COLETA;MATERIAL/HORA ENTRADA;HORA SAIDA;PLACA;CANCELADA;MOTIVO CANCELAMENTO;COLETADA;ENVIAR EMAIL;");
+                csv.AppendLine("COD_OS;NOME CLIENTE;FANTASIA;INSCRIÇÃO ESTADUAL;ENDEREÇO;TELEFONES;EMAIL;MÊS/ANO;DATA DA GERAÇÃO OS;NOME MOTORISTA;QUANTIDADE COLETADA;DATA COLETA;MATERIAL;HORA ENTRADA;HORA SAIDA;PLACA;CANCELADA;MOTIVO CANCELAMENTO;COLETADA;ENVIAR EMAIL;");
 
                 foreach (var x in resultado.Dados)
                 {
-                    csv.Append($"\"{x.Cod_Cliente}\";");
+                    csv.Append($"\"{x.Cod_OS}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.NomeCompleto_RazaoSocial) ? x.Cliente.NomeCompleto_RazaoSocial : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.Fantasia) ? x.Cliente.Fantasia : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Cliente.Insc_Estadual) ? x.Cliente.Insc_Estadual : string.Empty)}\";");                    
@@ -100,7 +100,7 @@ namespace Projeto.Services.Controllers
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Material.Descricao) ? x.Material.Descricao : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Hora_Entrada) ? x.Hora_Entrada : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Hora_Saida) ? x.Hora_Saida : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Placa) ? x.Placa : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Motorista.Placa) ? x.Motorista.Placa : string.Empty)}\";");
                     csv.Append($"\"{(x.Flag_Cancelado != null ? (Convert.ToBoolean(x.Flag_Cancelado) ? "Sim" : "Não") : "Não")}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Motivo_Cancelamento) ? x.Motivo_Cancelamento : string.Empty)}\";");
                     csv.Append($"\"{(x.Flag_Coleta != null ? (Convert.ToBoolean(x.Flag_Coleta) ? "Sim" : "Não") : "Não")}\";");

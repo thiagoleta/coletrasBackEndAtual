@@ -11,15 +11,14 @@ namespace Projeto.Data.Commands
 		public DateTime Data_Geracao { get; set; }
 		public int Quantidade_Coletada { get; set; }
 		public DateTime? Data_Coleta { get; set; }
-		public string Flag_Coleta { get; set; }
-		public string Flag_Envio_Email { get; set; }
-		public string Flag_Cancelado { get; set; }
+		public bool? Flag_Coleta { get; set; }
+		public bool? Flag_Envio_Email { get; set; }
+		public bool? Flag_Cancelado { get; set; }
 		public string Motivo_Cancelamento { get; set; }
 		public DateTime? Data_Cancelamento { get; set; }
 		public string Hora_Entrada { get; set; }
 		public string Hora_Saida { get; set; }
-		public string Placa { get; set; }
-
+		
 		
 		public int Cod_Cliente { get; set; }
 
@@ -70,10 +69,7 @@ namespace Projeto.Data.Commands
 			{
 				AddNotification(nameof(Motivo_Cancelamento), "O Campo Motivo Cancelamento pode conter no máximo 150 caracteres.");
 			}
-			if (!string.IsNullOrEmpty(Placa) && Placa.Length > 10)
-			{
-				AddNotification(nameof(Placa), "O Campo Placa pode conter no máximo 15 caracteres.");
-			}
+		
 		}
     }
 }

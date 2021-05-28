@@ -12,6 +12,7 @@ namespace Projeto.Data.Repository.Sorts
 		NomeCompleto_RazaoSocial,
 		NomeMotorista,
 		Quantidade_Coletada,
+		MaterialDesc,
 		Data_Coleta,	
 		Flag_Coleta,		
 		Hora_Entrada,

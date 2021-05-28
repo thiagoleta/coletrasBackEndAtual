@@ -23,9 +23,9 @@ namespace Projeto.Data.Entities
 				Cod_Cliente = cliente.Cod_Cliente,
 				Cod_MesReferencia = mesRef.Cod_MesReferencia,
 				Data_Geracao = DateTime.Now,
-				Flag_Coleta = "N",
-				Flag_Envio_Email = "S",
-				Flag_Cancelado = "N"				
+				Flag_Coleta = false,
+				Flag_Envio_Email = true,
+				Flag_Cancelado = false				
 			};
 			return os;
 		}
@@ -36,14 +36,13 @@ namespace Projeto.Data.Entities
 								Motorista motorista,
 								 int quantidade_Coletada,
 								 DateTime? data_Coleta,
-								 DataString? flag_Coleta,
-								 DataString? flag_Envio_Email,
-								 DataString? flag_Cancelado,								 
+								 bool? flag_Coleta,
+								 bool? flag_Envio_Email,
+								 bool? flag_Cancelado,								 
 								 DataString? motivo_Cancelamento,
 								 DateTime? data_Cancelamento,
 								 DataString? hora_Entrada,
-								 DataString? hora_Saida,
-								 DataString? placa) 
+								 DataString? hora_Saida) 
 		{
 			{
 				Cod_Cliente = cliente.Cod_Cliente;
@@ -58,8 +57,7 @@ namespace Projeto.Data.Entities
 				Motivo_Cancelamento = motivo_Cancelamento;
 				Data_Cancelamento = data_Cancelamento;
 				Hora_Entrada = hora_Entrada;
-				Hora_Saida = hora_Saida;
-				Placa = placa;
+				Hora_Saida = hora_Saida;				
 			};
 			
 		}
@@ -69,14 +67,13 @@ namespace Projeto.Data.Entities
 		public DateTime Data_Geracao { get; set; }
 		public int Quantidade_Coletada { get; set; }
 		public DateTime? Data_Coleta { get; set; }
-		public string Flag_Coleta { get; set; }
-		public string Flag_Envio_Email { get; set; }		
-		public string Flag_Cancelado { get; set; }
+		public bool? Flag_Coleta { get; set; }
+		public bool? Flag_Envio_Email { get; set; }		
+		public bool? Flag_Cancelado { get; set; }
 		public string Motivo_Cancelamento { get; set; }
 		public DateTime? Data_Cancelamento { get; set; }		
 		public string Hora_Entrada { get; set; }
-		public string Hora_Saida { get; set; }
-		public string Placa { get; set; }
+		public string Hora_Saida { get; set; }		
 
 
 		public List<Cliente> Clientes { get; set; }
