@@ -16,7 +16,7 @@ namespace Projeto.Data.Mappings
             builder.ToTable("Roteiro");
 
             builder.HasKey(ro => ro.Cod_Roteiro);
-            builder.Property(ro => ro.Cod_Roteiro).HasColumnName("Cod_Roteiro").HasDefaultValue(null); ;
+            builder.Property(ro => ro.Cod_Roteiro).HasColumnName("Cod_Roteiro").HasDefaultValue(null);
 
 
             builder.Property(ro => ro.Cod_Cliente).HasColumnName("Cod_Cliente").IsRequired();

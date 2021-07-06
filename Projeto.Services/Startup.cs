@@ -92,6 +92,8 @@ namespace Projeto.Services
             services.AddTransient<ITurnoRepository, TurnoRepository>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IUsuarioService, UsuarioService>();
+            services.AddTransient<IFrotaService, FrotaService>();
+            services.AddTransient<IFrotaRepository, FrotaRepository>();
 
 
 
