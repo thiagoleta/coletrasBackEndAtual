@@ -84,7 +84,7 @@ namespace Projeto.Services.Controllers
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Motorista.Nome) ? x.Motorista.Nome : string.Empty)}\";");
                     csv.Append($"\"{(x.Placa != null ? x.Placa.ToString() : "")}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Observacao) ? x.Observacao : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.KM) ? x.KM : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Quilometragem) ? x.Quilometragem : string.Empty)}\";");
                     csv.AppendLine("");
                 }
 

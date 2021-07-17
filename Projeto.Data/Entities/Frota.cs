@@ -21,7 +21,7 @@ namespace Projeto.Data.Entities
                                     DataString descricao,
                                     DataString placa,
                                     DataString? observacao,
-                                     DataString? km)
+                                     DataString? quilometragem)
 
         {
             var frota = new Frota()
@@ -30,7 +30,7 @@ namespace Projeto.Data.Entities
                 Descricao = descricao,
                 Placa = placa,
                 Observacao = observacao,
-                KM = km
+                Quilometragem = quilometragem
             };
             return frota;
         }
@@ -39,13 +39,13 @@ namespace Projeto.Data.Entities
                                 DataString descricao,
                                 DataString placa,
                                  DataString? observacao,
-                                  DataString? km)
+                                  DataString? quilometragem)
         {
             Cod_Motorista = motorista.Cod_Motorista;
             Descricao = descricao;
             Placa = placa;
             Observacao = observacao;
-            KM = km;
+            Quilometragem = quilometragem;
 
 
         }
@@ -55,7 +55,7 @@ namespace Projeto.Data.Entities
         public string Descricao { get; set; }
         public string Placa { get; set; }
         public string Observacao { get; set; }
-        public string KM { get; set; }
+        public string Quilometragem { get; set; }
 
         public Motorista Motorista { get; set; }
 

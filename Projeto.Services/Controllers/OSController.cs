@@ -100,7 +100,7 @@ namespace Projeto.Services.Controllers
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Material.Descricao) ? x.Material.Descricao : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Hora_Entrada) ? x.Hora_Entrada : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Hora_Saida) ? x.Hora_Saida : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Motorista.Placa) ? x.Motorista.Placa : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Frota.Placa) ? x.Frota.Placa : string.Empty)}\";");
                     csv.Append($"\"{(x.Flag_Cancelado != null ? (Convert.ToBoolean(x.Flag_Cancelado) ? "Sim" : "Não") : "Não")}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Motivo_Cancelamento) ? x.Motivo_Cancelamento : string.Empty)}\";");
                     csv.Append($"\"{(x.Flag_Coleta != null ? (Convert.ToBoolean(x.Flag_Coleta) ? "Sim" : "Não") : "Não")}\";");

@@ -34,10 +34,9 @@ namespace Projeto.Data.Mappings
 
             builder.Property(c => c.Cod_Motorista).HasColumnName("Cod_Motorista").HasDefaultValue(null);
             builder.Property(c => c.Cod_Material).HasColumnName("Cod_Material").HasDefaultValue(null);
-
             builder.Property(c => c.Cod_MesReferencia).HasColumnName("Cod_MesReferencia").HasDefaultValue(null);
             builder.Property(c => c.Cod_Cliente).HasColumnName("Cod_Cliente").HasDefaultValue(null);
-
+            builder.Property(c => c.Cod_Frota).HasColumnName("Cod_Frota").HasDefaultValue(null);
 
             #region Mapeamento dos Relacionamentos
 
@@ -55,6 +54,10 @@ namespace Projeto.Data.Mappings
 
             builder.Property(o => o.Cod_Motorista);
             builder.HasOne(o => o.Motorista).WithMany().HasForeignKey(o => o.Cod_Motorista);
+
+
+            builder.Property(o => o.Cod_Frota);
+            builder.HasOne(o => o.Frota).WithMany().HasForeignKey(o => o.Cod_Frota);
 
 
             #endregion

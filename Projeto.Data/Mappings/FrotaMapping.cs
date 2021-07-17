@@ -20,7 +20,7 @@ namespace Projeto.Data.Mappings
             builder.Property(f => f.Descricao).HasColumnName("Descricao").IsRequired();
             builder.Property(f => f.Placa).HasColumnName("Placa").IsRequired();
             builder.Property(f => f.Observacao).HasColumnName("Observacao");
-            builder.Property(f => f.KM).HasColumnName("KM");
+            builder.Property(f => f.Quilometragem).HasColumnName("Quilometragem");
 
             builder.Property(f => f.Cod_Motorista);
             builder.HasOne(f => f.Motorista).WithMany().HasForeignKey(f => f.Cod_Motorista);

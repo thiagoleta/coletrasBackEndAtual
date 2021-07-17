@@ -51,7 +51,7 @@ namespace Projeto.Data.Services.Implementations
                                 DataString.FromString(command.Descricao),
                                 DataString.FromString(command.Placa),
                                 DataString.FromNullableString(command.Observacao),
-                                DataString.FromNullableString(command.KM));
+                                DataString.FromNullableString(command.Quilometragem));
 
                 dataContext.SaveChanges();
                 return CommandResult.Valid();
@@ -86,7 +86,7 @@ namespace Projeto.Data.Services.Implementations
                                                DataString.FromString(command.Descricao),
                                                DataString.FromString(command.Placa),
                                                DataString.FromNullableString(command.Observacao),
-                                               DataString.FromNullableString(command.KM));
+                                               DataString.FromNullableString(command.Quilometragem));
 
                     dataContext.Add(frota);
                     dataContext.SaveChanges();

@@ -52,6 +52,7 @@ namespace Projeto.Data.Repository
             IQueryable<OS> query = dataContext.OS.Include(c => c.Cliente)
                                                            .Include(c => c.MesReferencia)                                                                                                                       
                                                             .Include(c => c.Material)
+                                                            .Include(c => c.Frota)
                                                             .Include(c => c.Motorista);
 
             switch (sort)
@@ -123,8 +124,8 @@ namespace Projeto.Data.Repository
                     }
                 case OsSort.Placa:
                     {
-                        query = ascending ? query.OrderBy(x => x.Motorista.Placa == null ? 0 : 1).ThenBy(x => x.Motorista.Placa) :
-                        query = query.OrderByDescending(x => x.Motorista.Placa == null ? 0 : 1).ThenByDescending(x => x.Motorista.Placa);
+                        query = ascending ? query.OrderBy(x => x.Frota.Placa == null ? 0 : 1).ThenBy(x => x.Frota.Placa) :
+                        query = query.OrderByDescending(x => x.Frota.Placa == null ? 0 : 1).ThenByDescending(x => x.Frota.Placa);
                         break;
                     }
                 case OsSort.Flag_Cancelado:

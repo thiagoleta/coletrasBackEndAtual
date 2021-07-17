@@ -76,10 +76,18 @@ namespace Projeto.Data.Services.Implementations
                     return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("Material", (int)command.Cod_Material));
                 }
 
+                var frota = dataContext.Frota.FirstOrDefault(x => x.Cod_Frota == command.Cod_Frota);
+
+                if (frota is null)
+                {
+                    return CommandResult.Invalid(Logs.EntidadeNaoEncontrada("Material", (int)command.Cod_Frota));
+                }
+
                 os.Atualizar(cliente,
                              mesRef,
                              material,
                              motorista,
+                             frota,
                              command.Quantidade_Coletada,
                              command.Data_Coleta,
                              command.Flag_Coleta,

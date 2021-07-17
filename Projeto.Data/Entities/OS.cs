@@ -34,6 +34,7 @@ namespace Projeto.Data.Entities
 								MesReferencia mesRef,
 								Material material,
 								Motorista motorista,
+								Frota frota,
 								 int quantidade_Coletada,
 								 DateTime? data_Coleta,
 								 bool? flag_Coleta,
@@ -49,6 +50,7 @@ namespace Projeto.Data.Entities
 				Cod_MesReferencia = mesRef.Cod_MesReferencia;
 				Cod_Material = material.Cod_Material;
 				Cod_Motorista = motorista.Cod_Motorista;
+				Cod_Frota = frota.Cod_Frota;
 				Quantidade_Coletada = quantidade_Coletada;
 				Data_Coleta = data_Coleta;
 				Flag_Coleta = flag_Coleta;
@@ -89,9 +91,11 @@ namespace Projeto.Data.Entities
 		public int? Cod_Motorista { get; set; }
 		public Motorista Motorista { get; set; }
 
+		public int Cod_Frota { get; set; }
+		public Frota Frota { get; set; }
 		//private int AtualizarCllienteOs(IEnumerable<Cliente> clientes)
 		//{
-			
+
 		//	foreach (var cliente in clientes)
 		//	{
 		//		int cod_Cliente;

@@ -14,7 +14,7 @@ namespace Projeto.Data.Commands
         public string Observacao { get; set; }
         public string Placa { get; set; }
 
-        public string KM { get; set; }
+        public string Quilometragem { get; set; }
 
         public override void Validate()
         {
@@ -24,7 +24,7 @@ namespace Projeto.Data.Commands
             }
             if (!Observacao.HasMaxLength(200))
             {
-                AddNotification(nameof(Observacao), "O Observação permite no máximo 400 caracteres");
+                AddNotification(nameof(Observacao), "O Observação permite no máximo 200 caracteres");
             }
             if (!Placa.HasMaxLength(20))
             {

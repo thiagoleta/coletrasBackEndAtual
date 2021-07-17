@@ -76,17 +76,26 @@ namespace Projeto.Data.Repository
                         query = query.OrderByDescending(a => a.Placa == null ? 0 : 1).ThenByDescending(a => a.Placa);
                     }
                     break;
-                case FrotaSort.kM:
+                case FrotaSort.Motorista:
                     if (ascending)
                     {
-                        query = query.OrderBy(a => a.KM == null ? 0 : 1).ThenBy(a => a.Observacao);
+                        query = query.OrderBy(a => a.Motorista.Nome == null ? 0 : 1).ThenBy(a => a.Motorista.Nome);
                     }
                     else
                     {
-                        query = query.OrderByDescending(a => a.KM == null ? 0 : 1).ThenByDescending(a => a.KM);
+                        query = query.OrderByDescending(a => a.Motorista.Nome == null ? 0 : 1).ThenByDescending(a => a.Motorista.Nome);
                     }
                     break;
-
+                case FrotaSort.Quilometragem:
+                    if (ascending)
+                    {
+                        query = query.OrderBy(a => a.Quilometragem == null ? 0 : 1).ThenBy(a => a.Quilometragem);
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(a => a.Quilometragem == null ? 0 : 1).ThenByDescending(a => a.Quilometragem);
+                    }
+                    break;
 
 
                 case FrotaSort.DescricaoFrota:

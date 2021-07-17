@@ -29,7 +29,8 @@ namespace Projeto.Data.Commands
 		
 
 		public int Cod_Motorista { get; set; }
-		
+
+		public int Cod_Frota { get; set; }
 
 		public override void Validate()
         {
@@ -48,6 +49,10 @@ namespace Projeto.Data.Commands
 			if (Cod_Motorista <= 0)
 			{
 				AddNotification(nameof(Cod_Cliente), "O campo Cliente é obrigatório.");
+			}
+			if (Cod_Frota <= 0)
+			{
+				AddNotification(nameof(Cod_Cliente), "O campo Placa é obrigatório.");
 			}
 			if (Data_Coleta.Equals(null))
 			{

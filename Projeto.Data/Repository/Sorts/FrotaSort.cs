@@ -10,6 +10,6 @@ namespace Projeto.Data.Repository.Sorts
         Motorista,
         DescricaoFrota,
         Placa,
-        kM
-    }
+        Quilometragem
+}
 }
