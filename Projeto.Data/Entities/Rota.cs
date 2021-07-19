@@ -24,7 +24,7 @@ namespace Projeto.Data.Entities
             DataString nome,
             DataString? composicao_rota,
             DataString? observacao,
-            bool? flag_ativo )
+            bool flag_ativo )
         {
             var rota = new Rota()
             {
@@ -41,7 +41,7 @@ namespace Projeto.Data.Entities
         public void Atualizar(DataString nome,
             DataString? composicao_rota,
             DataString? observacao,
-            bool? flag_ativo)
+            bool flag_ativo)
         {
             {
                 Nome = nome;
@@ -55,7 +55,7 @@ namespace Projeto.Data.Entities
         public int Cod_Rota { get; set; }
         public string Nome { get; set; }
         public string Composicao_Rota { get; set; }
-        public bool? Flag_Ativo { get; set; }
+        public bool Flag_Ativo { get; set; }
         public string Observacao { get; set; }
 
 

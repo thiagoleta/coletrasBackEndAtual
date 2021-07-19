@@ -11,7 +11,7 @@ namespace Projeto.Data.Commands
         
         public string Nome { get; set; }
         public string Composicao_Rota { get; set; }
-        public bool? Flag_Ativo { get; set; }
+        public bool Flag_Ativo { get; set; }
         public string Observacao { get; set; }
 
         public override void Validate()

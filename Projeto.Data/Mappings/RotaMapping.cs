@@ -19,9 +19,9 @@ namespace Projeto.Data.Mappings
 
             builder.Property(x => x.Nome).HasColumnName("Nome");
             builder.Property(x => x.Composicao_Rota).HasColumnName("Composicao_Rota");
-            builder.Property(x => x.Flag_Ativo).HasColumnName("Flag_Ativo").HasConversion(ValueConverters.BoolToString).HasDefaultValue(false);
+            builder.Property(x => x.Flag_Ativo).HasColumnName("Flag_Ativo").HasConversion(ValueConverters.BoolToString);
             builder.Property(x => x.Observacao).HasColumnName("Observacao");
-
+       
         }
 
     }

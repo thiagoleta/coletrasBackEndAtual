@@ -61,7 +61,7 @@ namespace Projeto.Services.Controllers
                     csv.Append($"\"{x.Cod_Rota}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome) ? x.Nome : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Composicao_Rota) ? x.Composicao_Rota : string.Empty)}\";");
-                    csv.Append($"\"{(x.Flag_Ativo != null ? (Convert.ToBoolean(x.Flag_Ativo) ? "Sim" : "Não") : "Não")}\";");
+                    csv.Append($"\"{(!x.Flag_Ativo || x.Flag_Ativo == false ? "Não" : "Sim")}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Observacao) ? x.Observacao : string.Empty)}\";");                    
                     csv.AppendLine("");
                 }
