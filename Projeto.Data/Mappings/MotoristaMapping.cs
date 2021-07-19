@@ -21,11 +21,10 @@ namespace Projeto.Data.Mappings
 
             builder.Property(x => x.Telefone2).HasColumnName("Telefone2");
 
-            builder.Property(bi => bi.Ajudante1).HasColumnName("Ajudante1");
+            builder.Property(bi => bi.Ajudante1).HasColumnName("Ajudante1");         
 
-            builder.Property(bi => bi.Ajudante2).HasColumnName("Ajudante2");
+            builder.Property(bi => bi.Observacao).HasColumnName("Observacao");
 
-            builder.Property(bi => bi.Placa).HasColumnName("Placa").IsRequired();
 
 
         }

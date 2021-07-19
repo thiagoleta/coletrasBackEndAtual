@@ -22,8 +22,7 @@ namespace Projeto.Data.Entities
 
         public static Motorista Criar(DataString nome,
             DataString? ajudante1,
-            DataString? ajudante2,
-            DataString placa, 
+            DataString? observacao,            
             DataString? telefone1,
             DataString? telefone2)
         {
@@ -32,8 +31,7 @@ namespace Projeto.Data.Entities
                 
                 Nome = nome,
                 Ajudante1 = ajudante1,
-                Ajudante2 = ajudante2,
-                Placa = placa,                
+                Observacao = observacao,                              
                 Telefone1 = telefone1,
                 Telefone2 = telefone2,
 
@@ -45,8 +43,7 @@ namespace Projeto.Data.Entities
 
         public void Atualizar(DataString nome,
             DataString? ajudante1,
-            DataString? ajudante2, 
-            DataString placa,
+            DataString? observacao,             
             DataString? telefone1,
             DataString? telefone2)
         {            
@@ -54,8 +51,7 @@ namespace Projeto.Data.Entities
 
                 Nome = nome;
                 Ajudante1 = ajudante1;
-                Ajudante2 = ajudante2;
-                Placa = placa;
+                Observacao = observacao;               
                 Telefone1 = telefone1;
                 Telefone2 = telefone2;
 
@@ -66,8 +62,7 @@ namespace Projeto.Data.Entities
         public int Cod_Motorista { get; set; }
 		public string Nome { get; set; }
 		public string Ajudante1 { get; set; }
-		public string Ajudante2 { get; set; }
-		public string Placa { get; set; }
+		public string Observacao { get; set; }		
 		public string Telefone1 { get; set; }
 		public string Telefone2 { get; set; }
 	}

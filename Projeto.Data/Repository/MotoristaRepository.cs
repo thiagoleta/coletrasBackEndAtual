@@ -78,18 +78,7 @@ namespace Projeto.Data.Repository
                         query = query.OrderByDescending(a => a.Ajudante1 == null ? 0 : 1).ThenByDescending(a => a.Ajudante1);
                     }
                     break;
-
-                case MotoristaSort.Ajudante2:
-                    if (ascending)
-                    {
-                        query = query.OrderBy(a => a.Ajudante2 == null ? 0 : 1).ThenBy(a => a.Ajudante2);
-                    }
-                    else
-                    {
-                        query = query.OrderByDescending(a => a.Ajudante2 == null ? 0 : 1).ThenByDescending(a => a.Ajudante2);
-                    }
-                    break;     
-
+             
                 case MotoristaSort.Telefone1:
                     if (ascending)
                     {
@@ -110,19 +99,7 @@ namespace Projeto.Data.Repository
                     {
                         query = query.OrderByDescending(a => a.Telefone2 == null ? 0 : 1).ThenByDescending(a => a.Telefone2);
                     }
-                    break;
-
-
-                case MotoristaSort.Placa:
-                    if (ascending)
-                    {
-                        query = query.OrderBy(a => a.Placa == null ? 0 : 1).ThenBy(a => a.Placa);
-                    }
-                    else
-                    {
-                        query = query.OrderByDescending(a => a.Placa == null ? 0 : 1).ThenByDescending(a => a.Placa);
-                    }
-                    break;
+                    break;     
 
 
                 case MotoristaSort.Nome:

@@ -49,8 +49,7 @@ namespace Projeto.Data.Services.Implementations
 
                 motorista.Atualizar(DataString.FromString(command.Nome),
                     DataString.FromNullableString(command.Ajudante1),
-                    DataString.FromNullableString(command.Ajudante2),
-                    DataString.FromString(command.Placa),
+                    DataString.FromNullableString(command.Observacao),               
                     DataString.FromNullableString(command.Telefone1),
                     DataString.FromNullableString(command.Telefone2));
 
@@ -80,8 +79,7 @@ namespace Projeto.Data.Services.Implementations
 
                 Motorista motorista = Motorista.Criar(DataString.FromString(command.Nome),
                     DataString.FromNullableString(command.Ajudante1),
-                    DataString.FromNullableString(command.Ajudante2),
-                    DataString.FromString(command.Placa),
+                    DataString.FromNullableString(command.Observacao),                  
                     DataString.FromNullableString(command.Telefone1),
                     DataString.FromNullableString(command.Telefone2));
 

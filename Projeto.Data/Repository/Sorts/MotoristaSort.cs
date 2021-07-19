@@ -9,9 +9,7 @@ namespace Projeto.Data.Repository.Sorts
     {
         Cod_Motorista,
         Nome,
-        Ajudante1,
-        Ajudante2,
-        Placa,
+        Ajudante1,  
         Telefone1,
         Telefone2
     }

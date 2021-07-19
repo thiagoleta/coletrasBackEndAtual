@@ -80,17 +80,16 @@ namespace Projeto.Services.Controllers
             if (resultado.Tipo == ResultType.Valid)
             {
                 StringBuilder csv = new StringBuilder();
-                csv.AppendLine("COD_MOTORISTA; NOME; AJUDANTE1; AJUDANTE2; TELEFONE1, TELEFONE2; PLACA");
+                csv.AppendLine("COD_MOTORISTA; NOME; AJUDANTE1; OBSERVAÇÕES; TELEFONE1; TELEFONES ADCIONAIS");
 
                 foreach (var x in resultado.Dados)
                 {
-
+                    csv.Append($"\"{x.Cod_Motorista}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Nome) ? x.Nome : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Ajudante1) ? x.Ajudante1 : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Ajudante2) ? x.Ajudante2 : string.Empty)}\";");
+                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Observacao) ? x.Observacao : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Telefone1) ? x.Telefone1 : string.Empty)}\";");
                     csv.Append($"\"{(!string.IsNullOrEmpty(x.Telefone2) ? x.Telefone2 : string.Empty)}\";");
-                    csv.Append($"\"{(!string.IsNullOrEmpty(x.Placa) ? x.Placa : string.Empty)}\";");
                     csv.AppendLine("");
                 }
 
